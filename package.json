@@ -1,0 +1,33 @@
+{
+  "name": "sokkerplusv2",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build:content_player_stats": "vite build --config vite.content_player_stats.config.ts",
+    "build:content_players_raport": "vite build --config vite.content_players_raport.config.ts",
+    "build:background": "vite build --config vite.background.config.ts",
+    "copy": "copy manifest.json dist\\manifest.json && copy src\\popup\\popup.html dist\\popup\\popup.html",
+    "build": "npm run build:content_player_stats && npm run build:content_players_raport && npm run build:background && npm run copy",
+    "build&tsc": "tsc && vite build",
+    "format": "prettier --write .",
+    "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@types/chrome": "^0.1.4",
+    "@types/node": "^24.3.0",
+    "prettier": "3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.0",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.0"
+  }
+}

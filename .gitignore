@@ -1,0 +1,6 @@
+# ---- IDE / OS ----
+.vscode/
+
+# ---- Node / Vite ----
+node_modules/
+dist/

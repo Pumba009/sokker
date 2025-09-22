@@ -1,0 +1,104 @@
+🔹 1. Gdzie najlepiej trzymać storage logic?
+Opcja A: chrome.storage w content script
+
+    działa tylko wtedy, gdy content script jest uruchomiony na stronie,
+
+    nie masz pełnej kontroli nad kiedy i jak długo dane są przechowywane,
+
+    content script żyje krótko (ładuje się wraz ze stroną).
+
+👉 Zwykle nie polecane jako główne miejsce do trzymania storage logic.
+
+Opcja B: chrome.storage w background script ✅
+
+    background działa w tle niezależnie od strony,
+
+    masz jedno centralne miejsce do trzymania danych,
+
+    content script lub popup mogą zawsze poprosić background o dane (via chrome.runtime.sendMessage).
+
+👉 To jest zalecane podejście:
+
+    content script zbiera dane → wysyła do background,
+
+    background zapisuje w chrome.storage,
+
+    popup/players content mogą je odczytać z background (lub bezpośrednio z chrome.storage).
+
+Twoje rozwiązanie (klasa ChromeStorageManager w background/storage.ts) jest dobrym kierunkiem 👍.
+
+🔹 2. Problem z Vite/Rollup bundling
+
+Masz sytuację:
+
+    background/index.ts importuje background/storage.ts,
+
+    content/players.ts również importuje background/storage.ts.
+
+➡️ Rollup/Vite zauważy, że storage.ts jest współdzielony → i zrobi z tego chunk (np. chunks/storage-XYZ.js).
+To działa w webaplikacji, ale w extension jest kłopotliwe, bo musiałbyś ręcznie dodać ten chunk do manifest.json.
+
+
+
+To, czy background/index.ts i background/storage.ts powinny być budowane razem w jeden plik, zależy od tego, jak chcesz zorganizować swój extension:
+
+🔹 Opcja A – Jeden plik background (index + storage)
+
+    Wszystko bundlujesz do jednego pliku background.js.
+
+    storage.ts jest po prostu helperem importowanym w index.ts.
+
+    Vite/Rollup wtedy wciąga cały kod do jednego entrypointu.
+
+👉 To jest zalecane podejście w Chrome Extension, bo:
+
+    Background ma być prosty (łatwiej debugować, rejestrować eventy w jednym miejscu).
+
+    Nie musisz pamiętać, aby w manifest.json dopisać kilka plików background.
+
+    Oszczędzasz trochę na rozmiarze i IO.
+
+Jak używać:
+
+    content/players.ts niech też importuje chrome.runtime.sendMessage(...) i pyta background o dane zamiast bezpośrednio używać storage class.
+
+
+✅ Podsumowanie
+
+    Najlepiej trzymaj index.ts i storage.ts w jednym bundle → background/index.js.
+
+    Wystarczy, że w Vite ustawisz manualChunks: undefined, a Rollup nie wytnie storage jako osobnego pliku.
+        manualChunks: undefined, // ⬅️ kluczowe – nie dzieli na osobne "chunks"
+
+
+
+Co jesli contstants.js jest uzywany przez content_script i przez background?
+
+po zbudowaniu content_script do js plik np players.js nie moze zawierac importow, tak działa chrome jest to ograniczenie ze wzgledow bezpieczenstwa
+
+to jest właśnie moment, w którym trzeba podjąć decyzję czy constants.js ma być współdzielony, czy bundlowany osobno.
+
+Scenariusz 1: constants.ts współdzielony przez wiele entry (background + content)
+
+Wtedy NIE możesz go „wbundlować” do jednego pliku (players.js), bo background też go potrzebuje.
+Vite/Rollup potraktuje go jako wspólny chunk → i właśnie dlatego widzisz folder chunks/.
+To jest normalne i zalecane podejście.
+
+
+
+build: {
+  rollupOptions: {
+    input: {
+      players: resolve(__dirname, "src/content/players.ts"),
+      background: resolve(__dirname, "src/background/index.ts"),
+    },
+    output: {
+      manualChunks: undefined // wyłącza dzielenie na chunks
+    }
+  }
+}
+✅ Moja rekomendacja
+
+Zostaw chunks/ (Scenariusz 1). To jest dobra praktyka. Chrome MV3 spokojnie radzi sobie z plikami importowanymi w dist/.
+
+Jeśli chcesz flat dist, to musisz zaakceptować duplikowanie constants.ts (Scenariusz 2).

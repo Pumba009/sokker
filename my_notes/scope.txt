@@ -1,0 +1,50 @@
+Skoro Twoje rozszerzenie ma:
+
+    Pobrać dane ze strony, na której jest użytkownik
+
+    Dodać wykres na końcu strony
+
+…to cała logika może być zawarta w content script (content.ts), bo:
+
+    Content script działa w kontekście strony → ma dostęp do DOM → możesz pobierać dane i wstrzykiwać elementy (np. <canvas> lub <svg>) z wykresem.
+
+Background script jest przydatny głównie, gdy chcesz:
+
+    Komunikować się między różnymi częściami rozszerzenia (popup, content script, background)
+
+    Wykonywać zadania w tle niezależne od strony
+
+    Przechowywać globalny stan lub dane między stronami
+
+W Twoim przypadku, jeśli wszystko dzieje się lokalnie na jednej stronie, wystarczy:
+
+    content.ts → pobiera dane, generuje wykres (np. przy użyciu Chart.js, D3.js lub innej biblioteki).
+
+    Ewentualnie popup.ts → jeśli chcesz umożliwić użytkownikowi np. kliknięcie przycisku “Pokaż wykres” lub konfigurację wykresu.
+
+
+Podsumowanie:
+
+    Background script nie jest wymagany, jeśli wszystkie operacje są na jednej stronie.
+
+    Możesz go dodać później, jeśli chcesz np. przechowywać dane w tle albo komunikować się z popupem.
+
+
+canvas 
+To biblioteka Node.js, która implementuje Canvas API z przeglądarki,
+    W Node.js możesz użyć canvas, żeby np. generować obrazy (PNG, JPG) po stronie serwera.
+    W przeglądarce nie musisz instalować canvas, bo Canvas API jest wbudowane w DOM (<canvas> + CanvasRenderingContext2D).
+
+Chart.js 
+Nie jest bilbioteka Node.js tylko front-endowa (przeglądarkowa), która korzysta z natywnego Canvas API (<canvas>)
+    chociaż można używac Chart.js w Node.js dzięki canvas (Node.Js) która implementuje Canvas API, 
+    canvas w Node.js udaje przeglądarkowy <canvas> i CanvasRenderingContext2D.
+
+Canvas API 
+To API z którego korzystają przeglądarki, posiada zestaw funkcji do rysowania (<canvas>, ctx.fillRect(), ctx.arc() itp.).
+    To API jest częścią standardu HTML5 i działa natywnie w Chrome, Firefox, Safari itd.
+Node.js to środowisko serwerowe (backend) nie posiada DOM ani Canvas API
+Rola biblioteki canvas w Node.js
+    Udaje przeglądarkowy <canvas> i CanvasRenderingContext2D.
+    Dzięki temu moze uzywac Canvas API
+    a takze biblioteki frontowe (np. Chart.js) mogą działać również w Node.js, np. generując obrazki, wykresy

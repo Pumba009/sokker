@@ -1,0 +1,35 @@
+cmd commands:
+create folder:
+    mkdir folderName
+
+delete folder: 
+    rmdir /s folderName
+
+crete file:
+    type nul > fileName.ext
+
+delete file:
+    del fileName.ext
+
+move file:
+    move fileName.ext folder\fileName.ext
+
+copy file:
+    cp manifest.json dist/manifest.json
+
+rename file:
+    ren oldName.ext newName.ext or ren "old name.txt" "new name.txt"
+
+
+
+start project:
+Skompilutj plik ts:
+    npx tsc
+
+Uruchom Vite dev server (obsluguje hot reload dla popup i content_script):
+    npm run dev
+
+w Chromie:
+    chrome://extensions/ -> Developer Mode -> Load unpacked -> wskaż folder gdzie znajduje sie manifest.json
+
+    

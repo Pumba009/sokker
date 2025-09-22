@@ -1,0 +1,56 @@
+budowanie projektu z ts na js:
+    "npx tsc"
+        (jako przypomnienie, nie trzeba uzywac npx tsc w tym projekcie)
+
+
+podczas budowania projektu przez vite:
+    "vite build"
+    vite robi bundla (kompiluje pliki ts do js, formatuje do 1 lini, zaciąga dependecies (czyli dodane importy))
+    komenda "vite build", wykonywane jest kilka stepow:
+        - pobierana jest konfiguracja z vite.config.ts, ustwaiamy tam:
+            - do którego pliku ma trafic przetworzony kod (outDir)
+            - jak ma wyglądać struktura plików w outDir (rollupOptions)
+        - na podstawie konfigutacji przerabia pliki ts na js i zapisuje do folderu outDir
+        - dla dynamicznych importow lub modułow współdzielonych (shared modules) generowany jest folder "chunk/"
+    za obslugę dynamicznych importow i modułów wspoł. odpowiedzy jest 'Rollup'
+    Rollup tworzy osobny chunk dla storage.ts, aby uniknąć powielania kodu, jeśli ten plik jest używany w więcej niż jednym entrypoint.
+
+
+Co robi vite build?
+Pod maską:
+1. Analiza dependency graph
+    Vite używa Rollup do zbudowania drzewa importów z Twoich entrypointów (input).
+
+2. Transpilacja
+    TypeScript → JS (tsc albo esbuild).
+    JSX, TSX, itp.
+
+3. Bundle / chunking
+    Rollup łączy wszystkie importy w paczki (bundle).
+    Jeśli pliki są współdzielone → wrzuca je do chunks/.
+
+4. Optymalizacja
+    Minifikacja (Terser/Esbuild).
+    Tree-shaking (usuwa nieużywany kod).
+
+5. Output
+    Tworzy pliki .js (entry + chunks), .css (jeśli style są importowane), assets (.svg, .png).
+    Do folderu dist/.
+
+
+Podsumowanie:
+chunks to dobra praktyka w webaplikacjach, ale w Chrome Extension często lepiej wyłączyć ich generowanie, żeby nie martwić się o manifest
+
+
+Czy chunks/ to dobra praktyka?
+Tak — chunks są domyślnym i zalecanym mechanizmem Rollup/Vite, bo:
+    - pozwalają współdzielić kod między entrypointami (background, content, popup),
+    - unikają powielania kodu (np. jak masz tę samą bibliotekę w background i popup, trafi do wspólnego chanka zamiast 2×),
+    - zmniejszają rozmiar plików do pobrania.
+
+W Chrome Extension sytuacja jest trochę inna:
+    - Content scripts i background scripts ładowane są niezależnie przez Manifest i nie mogą współdzielić kodu przez importy runtime (każdy działa w sandboxie).
+    - Jeżeli Rollup wrzuci Ci coś wspólnego do chunks/vendor-xxx.js, musisz ręcznie dopisać ten plik do manifest.json (background.scripts albo content_scripts).
+
+👉 Dlatego w extension często celowo wyłącza się dzielenie na chunk-i (żeby mieć pewność, że każdy entrypoint to jeden plik).
+👉 Ale jeśli np. tylko popup używa dodatkowego helpera (drugi entrypoint), to trzymanie tego jako osobny plik jest OK.

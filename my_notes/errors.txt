@@ -1,0 +1,82 @@
+1.
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+TypeError: Cannot read properties of undefined (reading 'join')
+    at file:///F:/Projects/Web/ChromeExtensions/sokkerPlusV2/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:14189:13
+    at async file:///F:/Projects/Web/ChromeExtensions/sokkerPlusV2/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:46985:28
+
+
+oznacza, że uruchomiłeś Vite dev server przez CommonJS (CJS) API, które jest obecnie przestarzałe.
+Vite zaleca używanie ES Module (ESM) API lub standardowego skryptu vite z package.json.
+
+Jeśli chcesz całkowicie pozbyć się ostrzeżeń, możesz w package.json dodać "type": "module"
+
+
+
+2.
+Cannot find name 'chrome'.
+
+npm install --save-dev @types/chrome
+
+tsconfig.json 
+  "compilerOptions": {
+    ...
+    "types": [
+        ...,
+        "chrome" -- musi byc
+        ]
+
+
+3.
+Uncaught SyntaxError: Cannot use import statement outside a module
+oznacza, że Chrome nie wie, że Twój skrypt jest modułem ES.
+Vite bundluje pliki jako ESM (import/export).
+Ale Chrome Extension wymaga, żebyś jawnie oznaczył, że plik JS jest modułem.
+
+Jak to poprawić?
+
+1. Content scripts (content/players.js)
+
+W manifest.json wpisujesz:
+"content_scripts": [
+  {
+    "matches": ["https://example.com/players*"],
+    "js": ["content/players.js"],
+    "type": "module"
+  }
+]
+type: "module" działa od Chrome 91+ i mówi, że players.js używa import/export.
+
+problem jest w tym, że w Manifest V3 Chrome nie obsługuje jeszcze type: "module" dla content_scripts.
+
+👉 type: "module" działa tylko dla:
+
+background.service_worker
+
+<script type="module"> w popup/HTML
+
+1.1. Trzeba zrobic bundla aby załadowac wszystkie zaleznosci do jednego pliku.
+1. Użyć bundlowania do jednego pliku (zalecane)
+
+Vite może spakować cały players.ts + importy (constants.ts) w jeden plik, żeby nie było import ... from ... w finalnym dist/content/players.js.
+
+
+
+
+
+2. Background worker (background/index.js)
+"background": {
+  "service_worker": "background/index.js",
+  "type": "module"
+}
+
+3. Popup (popup.html)
+
+W popup.html musisz dodać type="module":
+<script type="module" src="popup/index.js"></script>
+
+
+Podsumowanie – co zrobić:
+
+Dodaj "type": "module" w manifest.json (dla content_scripts i background).
+
+Dodaj type="module" w <script> w popup.html.

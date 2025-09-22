@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Sokker Plus V2",
+  "version": "1.0",
+  "background": {
+    "service_worker": "background/index.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://sokker.org/pl/app/training/main-team-progress/"],
+      "js": ["content/players_raport.js"]
+    },
+    {
+      "matches": [
+        "https://sokker.org/player/PID/*",
+        "https://sokker.org/pl/app/training/player-info/*"
+      ],
+      "js": ["content/player_stats.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html"
+  },
+  "icons": {
+    "16": "images/sokker-16.png",
+    "48": "images/sokker-48.png",
+    "128": "images/sokker-128.png"
+  },
+  "permissions": ["storage", "tabs"]
+}

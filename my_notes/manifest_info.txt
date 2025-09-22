@@ -1,0 +1,64 @@
+
+
+W manifest.json ścieżki muszą być relatywne względem dist/, bo właśnie ten folder ładujesz jako rozszerzenie.
+
+Jak dodac zdjęcia do dist
+mozna utworzyc folder public i wrzucic folder images, wtedy vite automatycznie skopiuje je do dist/images/
+
+
+
+Manifest V3 Chrome nie obsługuje jeszcze type: "module" dla content_scripts.
+
+👉 type: "module" działa tylko dla:
+
+background.service_worker
+
+script type="module" w popup/HTML
+
+Rozwiązanie dla content_scripts
+
+Bundle must be self-contained – players.ts + wszystkie jego importy (constants.ts, helpery itd.) muszą być zbite w jeden plik.
+👉 dzięki temu w dist/content/players.js nie ma import, tylko czysty kod.
+Wszystko co znajduje się w folderze content zostanie zbundlowane, nie tylko same importy ale tez inne pliki, np.
+src>
+    players.ts
+    player.ts
+    sotrage.ts
+dist>
+    tylko_1_plik_ktory_zawiera_wszystko
+
+Możesz to osiągnąć np. tak w vite.config.ts:
+dodjac      
+     manualChunks(id) {
+          if (id.includes("src/content")) {
+            return "players"; // wszystko z content → jeden plik
+          }
+          
+vite.config.ts:      
+import { resolve } from "path";
+
+export default {
+  build: {
+    rollupOptions: {
+      input: {
+        players: resolve(__dirname, "src/content/players.ts"),
+        background: resolve(__dirname, "src/background/index.ts"),
+        popup: resolve(__dirname, "src/popup/popup.ts"),
+      },
+      output: {
+        entryFileNames: ({ name }) => {
+          if (name === "players") return "content/players.js";
+          if (name === "background") return "background/index.js";
+          if (name === "popup") return "popup/index.js";
+          return "[name].js";
+        },
+        // kluczowe! dla content scriptów
+        manualChunks(id) {
+          if (id.includes("src/content")) {
+            return "players"; // wszystko z content → jeden plik
+          }
+        },
+      },
+    },
+  },
+};

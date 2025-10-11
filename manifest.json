@@ -19,9 +19,9 @@
     "default_popup": "popup/popup.html"
   },
   "icons": {
-    "16": "images/sokker-16.png",
-    "48": "images/sokker-48.png",
-    "128": "images/sokker-128.png"
+    "16": "images/favicon.ico",
+    "48": "images/favicon.ico",
+    "128": "images/favicon.ico"
   },
   "permissions": ["storage", "tabs", "scripting", "webNavigation"],
   "host_permissions": ["https://sokker.org/*"]

@@ -36,7 +36,7 @@ export class PageHelper {
 
     function getPlayersData(cell: HTMLTableCellElement): number {
       const player_data = parseInt(cell?.childNodes[0]?.childNodes[0]?.textContent ?? '');
-      if (!player_data) {
+      if (isNaN(player_data)) {
         console.log(
           `Bład podczas parsowania umiejetnosci zawodnika: ${player_name}, value: ${cell?.childNodes[0]?.childNodes[0]?.textContent}`,
         );

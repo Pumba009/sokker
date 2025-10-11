@@ -8,10 +8,6 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://sokker.org/pl/app/training/main-team-progress/"],
-      "js": ["content/players_raport.js"]
-    },
-    {
       "matches": [
         "https://sokker.org/player/PID/*",
         "https://sokker.org/pl/app/training/player-info/*"
@@ -27,5 +23,6 @@
     "48": "images/sokker-48.png",
     "128": "images/sokker-128.png"
   },
-  "permissions": ["storage", "tabs"]
+  "permissions": ["storage", "tabs", "scripting", "webNavigation"],
+  "host_permissions": ["https://sokker.org/*"]
 }

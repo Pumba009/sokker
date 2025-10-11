@@ -1,16 +1,7 @@
 import { IPlayersData } from '../types/interfaces';
 import { SavePlayersToStorageViaMassage } from '../utils/storage_helper';
 
-document.body.insertAdjacentHTML('beforeend', '<p>Popup działa ✅</p>');
-
 document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('btnImport');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      //document.body.insertAdjacentHTML('beforeend', '<p>'+ ++counter + '</p>');
-    });
-  }
-
   const fileInput = document.getElementById('fileInput');
   if (fileInput) {
     fileInput.addEventListener('change', importPlayers);

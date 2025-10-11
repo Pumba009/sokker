@@ -2,12 +2,12 @@
   "name": "sokkerplusv2",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "vite",
     "build:content_player_stats": "vite build --config vite.content_player_stats.config.ts",
     "build:content_players_raport": "vite build --config vite.content_players_raport.config.ts",
     "build:background": "vite build --config vite.background.config.ts",
-    "copy": "copy manifest.json dist\\manifest.json && copy src\\popup\\popup.html dist\\popup\\popup.html",
+    "copy": "copy manifest.json dist\\manifest.json && copy src\\popup\\popup.html dist\\popup\\popup.html && copy src\\popup\\styles.css dist\\popup\\styles.css",
     "build": "npm run build:content_player_stats && npm run build:content_players_raport && npm run build:background && npm run copy",
     "build&tsc": "tsc && vite build",
     "format": "prettier --write .",
@@ -21,8 +21,11 @@
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@types/chrome": "^0.1.4",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.3.0",
+    "jest": "^30.2.0",
     "prettier": "3.6.2",
+    "ts-jest": "^29.4.4",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.44.0",
     "vite": "^6.3.5"

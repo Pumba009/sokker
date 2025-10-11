@@ -5,11 +5,12 @@ create folder:
 delete folder: 
     rmdir /s folderName
 
-crete file:
+create file:
     type nul > fileName.ext
 
 delete file:
-    del fileName.ext
+    del fileName.ext (bash)
+    rm my_chart.ts
 
 move file:
     move fileName.ext folder\fileName.ext
@@ -17,8 +18,12 @@ move file:
 copy file:
     cp manifest.json dist/manifest.json
 
-rename file:
+rename file/folder:
     ren oldName.ext newName.ext or ren "old name.txt" "new name.txt"
+
+modify file:
+    echo "hello" >> jest.config.js
+    notepad jest.config.js
 
 
 

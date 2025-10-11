@@ -10,26 +10,26 @@
 //    są zewnętrzne (np. @types/lodash).
 
 export interface IPlayersData {
-  lastUpdateDay: Date;
+  lastUpdateDay: string;
   players: IPlayer[];
 }
 
 export interface IPlayer {
   id: string;
   name: string;
-  updateDateTime: Date[];
+  updateDateTime: string[];
   progressHistory: IPlayerStats[];
 }
 
 export interface IPlayerStats {
-  defense_num: number;
-  keeper_num: number;
-  pass_num: umber;
-  playmaker_num: umber;
-  speed_num: umber;
-  stamina_num: umber;
-  striker_num: umber;
-  technique_num: umber;
+  defense_num: string;
+  keeper_num: string;
+  pass_num: string;
+  playmaker_num: string;
+  speed_num: string;
+  stamina_num: string;
+  striker_num: string;
+  technique_num: string;
 }
 
 // declare class Player implements IPlayer {

@@ -1,0 +1,88 @@
+.sample {
+  font-style: bold;
+  color: red;
+  font-size: large;
+}
+
+/* body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #5397ff;
+    margin: 0;
+    padding: 20px;
+    border-radius: 12px;
+  } */
+
+html,
+body {
+  background: #f9fafe00; /* usuwamy tło popupu */
+  margin: 20;
+  padding: 20;
+}
+
+.popup-container {
+  background: linear-gradient(145deg, #f9fafe, #eef1f9);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  color: #0b3a8c;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* 3) Alternatywa: kolorowe tło i cień, przydatne do wyróżnień */
+.rounded-highlight {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f0f4ff, #e3ecff);
+  color: #0b3a8c;
+  font-weight: 600;
+  border: 1px solid rgba(11, 58, 140, 0.1);
+  box-shadow: 0 4px 12px rgba(11, 58, 140, 0.15);
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+.rounded-highlight:hover {
+  box-shadow:
+    0 6px 16px rgba(11, 58, 140, 0.25),
+    0 0 10px rgba(83, 142, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Mały helper — zmniejsza rozmiar na mobilkach */
+@media (max-width: 420px) {
+  .pill,
+  .rounded-box,
+  .rounded-highlight {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+/* 1) Prosta etykieta (pill) — małe, zaokrąglone obramowanie wokół tekstu */
+.pill {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 9999px; /* pełne zaokrąglenie */
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.85);
+  color: #111;
+  font-size: 0.9rem;
+  line-height: 1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* 2) Wyraźne pudełko z zaokrąglonymi rogami */
+.rounded-box {
+  display: inline-block;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  color: #222;
+  font-size: 1rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}

@@ -1,6 +1,6 @@
 import { PlayerHelper } from '../utils/player_helper';
 import { IPlayer } from '../types/interfaces';
-import { MyChart } from './my_chart';
+import { MyChart } from '../components/my_chart';
 
 export class ChartManager<T extends IPlayer> {
   private data: T;

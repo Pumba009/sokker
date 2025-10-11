@@ -2,7 +2,7 @@ import { IPlayerStats, IPlayer } from '../types/interfaces';
 import { DateHelper } from '../utils/date_helper';
 
 export class PageHelper {
-  static GetPlayersStatsFromPage(tableRows: HTMLTableSectionElement): IPlayer[] {
+  static GetPlayersStatsFromPage(tableRows: HTMLElement): IPlayer[] {
     const players: IPlayer[] = [];
 
     const rows = tableRows.querySelectorAll<HTMLTableRowElement>('tr.table-row');
@@ -28,21 +28,18 @@ export class PageHelper {
     return {
       id: tableRow.dataset.rowId ?? '',
       name: this.getPlayersName(tableRow),
-      updateDateTime: [DateHelper.GetLastUpdateThursday()],
+      updateDateTime: [DateHelper.GetUpdateThursday()],
       progressHistory: [stats],
     } as IPlayer;
   }
 
-  private static getPlayersData(cell: any) {
+  private static getPlayersData(cell: HTMLTableCellElement) {
     return cell?.childNodes[0]?.childNodes[0]?.textContent;
   }
 
-  private static getPlayersName(tableRow: any) {
-    const div = tableRow.cells[1]?.childNodes[0]; // cells[0] - flaga,  cells[1] - name;
-    if (div.childElementCount != 0) {
-      //div -> span -> a.text. Tylko nazwisko bo ma linka
-      return div.childNodes[0]?.childNodes[0]?.text;
-    }
-    return null;
+  private static getPlayersName(tableRow: HTMLTableRowElement) {
+    const anchor = tableRow.cells[1]?.querySelector('a'); //cells[0] - flaga,  cells[1] - name;
+    const playerName = anchor?.textContent?.trim();
+    return playerName;
   }
 }

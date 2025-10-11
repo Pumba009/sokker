@@ -1,6 +1,8 @@
 budowanie projektu z ts na js:
     "npx tsc"
         (jako przypomnienie, nie trzeba uzywac npx tsc w tym projekcie)
+    wystarczy uruchomic komende: 'npm run build' 
+    (komende wpisujemy do konsoli w scieżce projektu, czyli w miejscu gdzie znajduje się plik 'package.json')
 
 
 podczas budowania projektu przez vite:

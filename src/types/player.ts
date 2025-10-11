@@ -3,7 +3,7 @@ import { IPlayer, IPlayerStats } from './interfaces';
 export class Player implements IPlayer {
   id!: string;
   name!: string;
-  updateDateTime!: Date[];
+  updateDateTime!: string[];
   progressHistory!: IPlayerStats[];
 
   constructor(init: IPlayer) {

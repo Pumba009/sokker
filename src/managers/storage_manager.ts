@@ -1,13 +1,13 @@
 import { IPlayer, IPlayersData } from '../types/interfaces';
 import { Player } from '../types/player';
 import { DateHelper } from '../utils/date_helper';
-import { WEEK_IN_MILISECONDS } from '../constants';
 import {
   LoadPlayersFromStorageViaMassage,
   SavePlayersToStorageViaMassage,
 } from '../utils/storage_helper';
+import { IStorageManager } from './interfaces/storage_manager_interface';
 
-export class StorageManager {
+export class StorageManager implements IStorageManager {
   private playersFromStorage: IPlayersData;
 
   constructor(players: IPlayersData) {
@@ -20,47 +20,18 @@ export class StorageManager {
   }
 
   public async UpdateRaport(playersFromPage: IPlayer[]) {
-    if (this.isStoreEmpty()) {
+    if (this.playersFromStorage == null) {
       console.log('Storage is empty. Adding players to storage for the First Time!');
       return await this.addToStorage(playersFromPage);
     }
 
-    if (this.shouldUpdateStorage(this.playersFromStorage.lastUpdateDay)) {
+    if (DateHelper.ShouldUpdateStorage(this.playersFromStorage.lastUpdateDay)) {
       console.log('It is update day!');
       return await this.updateAllPlayers(playersFromPage, this.playersFromStorage);
     }
 
     console.log('It is not update day!');
     return;
-  }
-
-  private isStoreEmpty() {
-    return this.playersFromStorage == null;
-  }
-
-  private async addToStorage(players: IPlayer[]) {
-    const playersToLolcalStorage = {
-      lastUpdateDay: DateHelper.GetLastUpdateThursday(),
-      players: players,
-    } as IPlayersData;
-
-    await SavePlayersToStorageViaMassage(playersToLolcalStorage);
-  }
-
-  private shouldUpdateStorage(lastUpdateDayFromLocalStorage: Date) {
-    const lastUpdateDate = new Date(lastUpdateDayFromLocalStorage);
-    // console.log(`from storage: ${lastUpdateDayFromLocalStorage}`);
-    // console.log(`converted from storage: ${lastUpdateDate}`);
-
-    const now = new Date();
-    now.setHours(12, 0, 0, 0);
-
-    const diff = now.getTime() - lastUpdateDate.getTime();
-    const daysToUpdate = new Date(WEEK_IN_MILISECONDS - diff).getDate() - 1;
-    console.log('Days to update: ' + daysToUpdate);
-
-    // czy minal tydzien od ostatniego update'u - czy kolejny czwartek po updatcie
-    return WEEK_IN_MILISECONDS - diff <= 0;
   }
 
   private async updateAllPlayers(playersStatsFromPage: IPlayer[], dataFromStorage: IPlayersData) {
@@ -80,6 +51,15 @@ export class StorageManager {
     }
 
     return await this.addToStorage(temporaryPlayers);
+  }
+
+  private async addToStorage(players: IPlayer[]) {
+    const playersToLolcalStorage = {
+      lastUpdateDay: DateHelper.GetUpdateThursday(),
+      players: players,
+    } as IPlayersData;
+
+    await SavePlayersToStorageViaMassage(playersToLolcalStorage);
   }
 
   private getPlayerByName(playerName: string, playersFromStorage: IPlayer[]): Player | undefined {

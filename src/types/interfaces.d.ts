@@ -22,14 +22,14 @@ export interface IPlayer {
 }
 
 export interface IPlayerStats {
-  defense_num: string;
-  keeper_num: string;
-  pass_num: string;
-  playmaker_num: string;
-  speed_num: string;
-  stamina_num: string;
-  striker_num: string;
-  technique_num: string;
+  defense_num: number;
+  keeper_num: number;
+  pass_num: number;
+  playmaker_num: number;
+  speed_num: number;
+  stamina_num: number;
+  striker_num: number;
+  technique_num: number;
 }
 
 // declare class Player implements IPlayer {

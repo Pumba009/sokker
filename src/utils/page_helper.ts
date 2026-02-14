@@ -2,7 +2,7 @@ import { IPlayerStats, IPlayer } from '../types/interfaces';
 import { DateHelper } from '../utils/date_helper';
 
 export class PageHelper {
-  static GetPlayersStatsFromPage(tableRows: HTMLElement): IPlayer[] {
+  static getPlayersStatsFromPage(tableRows: HTMLElement): IPlayer[] {
     const players: IPlayer[] = [];
 
     const rows = tableRows.querySelectorAll<HTMLTableRowElement>('tr.table-row');
@@ -14,7 +14,7 @@ export class PageHelper {
   }
 
   private static GetPlayersSkillsFromPage(tableRow: HTMLTableRowElement): IPlayer {
-    const player_name = getPlayersName(tableRow);
+    const playerName = getPlayersName(tableRow);
 
     const stats: IPlayerStats = {
       stamina_num: getPlayersData(tableRow.cells[6]), //stamina_num
@@ -29,19 +29,19 @@ export class PageHelper {
 
     return {
       id: tableRow.dataset.rowId ?? '',
-      name: player_name,
-      updateDateTime: [DateHelper.GetUpdateThursday()],
+      name: playerName,
+      updateDateTime: [DateHelper.getUpdateThursday()],
       progressHistory: [stats],
     } as IPlayer;
 
     function getPlayersData(cell: HTMLTableCellElement): number {
-      const player_data = parseInt(cell?.childNodes[0]?.childNodes[0]?.textContent ?? '');
-      if (isNaN(player_data)) {
+      const playerData = parseInt(cell?.childNodes[0]?.childNodes[0]?.textContent ?? '');
+      if (isNaN(playerData)) {
         console.log(
-          `Bład podczas parsowania umiejetnosci zawodnika: ${player_name}, value: ${cell?.childNodes[0]?.childNodes[0]?.textContent}`,
+          `Bład podczas parsowania umiejetnosci zawodnika: ${playerName}, value: ${cell?.childNodes[0]?.childNodes[0]?.textContent}`,
         );
       }
-      return player_data;
+      return playerData;
     }
 
     function getPlayersName(tableRow: HTMLTableRowElement) {

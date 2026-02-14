@@ -8,11 +8,17 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://sokker.org/player/PID/*",
-        "https://sokker.org/pl/app/training/player-info/*"
-      ],
-      "js": ["content/player_stats.js"]
+      "matches": ["https://sokker.org/player/PID/*"],
+      "js": ["content/player_stats.js"],
+      "css": ["content/style.css"]
+    },
+    {
+      "matches": ["https://sokker.org/pl/app/training/player-info/*"],
+      "js": ["content/player_info.js"]
+    },
+    {
+      "matches": ["https://sokker.org/friendlies/action/public_invitations/*"],
+      "js": ["content/friendly_invitations.js"]
     }
   ],
   "action": {

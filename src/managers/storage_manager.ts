@@ -2,32 +2,32 @@ import { IPlayer, IPlayersData } from '../types/interfaces';
 import { Player } from '../types/player';
 import { DateHelper } from '../utils/date_helper';
 import {
-  LoadPlayersFromStorageViaMassage,
-  SavePlayersToStorageViaMassage,
+  loadPlayersStatsFromStorageViaMassage,
+  savePlayersStatsToStorageViaMassage,
 } from '../utils/storage_helper';
 import { IStorageManager } from './interfaces/storage_manager_interface';
 
 export class StorageManager implements IStorageManager {
-  private playersFromStorage: IPlayersData;
+  private _playersFromStorage: IPlayersData;
 
   constructor(players: IPlayersData) {
-    this.playersFromStorage = players;
+    this._playersFromStorage = players;
   }
 
-  static async Create() {
-    const players = await LoadPlayersFromStorageViaMassage();
+  static async create() {
+    const players = await loadPlayersStatsFromStorageViaMassage();
     return new StorageManager(players);
   }
 
-  public async UpdateRaport(playersFromPage: IPlayer[]) {
-    if (this.playersFromStorage == null) {
+  public async updateRaport(playersFromPage: IPlayer[]) {
+    if (this._playersFromStorage == null) {
       console.log('Storage is empty. Adding players to storage for the First Time!');
       return await this.addToStorage(playersFromPage);
     }
 
-    if (DateHelper.ShouldUpdateStorage(this.playersFromStorage.lastUpdateDay)) {
+    if (DateHelper.shouldUpdateStorage(this._playersFromStorage.lastUpdateDay)) {
       console.log('It is update day!');
-      return await this.updateAllPlayers(playersFromPage, this.playersFromStorage);
+      return await this.updateAllPlayers(playersFromPage, this._playersFromStorage);
     }
 
     console.log('It is not update day!');
@@ -55,11 +55,11 @@ export class StorageManager implements IStorageManager {
 
   private async addToStorage(players: IPlayer[]) {
     const playersToLolcalStorage = {
-      lastUpdateDay: DateHelper.GetUpdateThursday(),
+      lastUpdateDay: DateHelper.getUpdateThursday(),
       players: players,
     } as IPlayersData;
 
-    await SavePlayersToStorageViaMassage(playersToLolcalStorage);
+    await savePlayersStatsToStorageViaMassage(playersToLolcalStorage);
   }
 
   private getPlayerByName(playerName: string, playersFromStorage: IPlayer[]): Player | undefined {

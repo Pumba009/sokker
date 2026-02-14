@@ -1,11 +1,11 @@
-import { STORAGE_KEYS } from '../constants';
+import { storageKeys } from '../constants';
 import { IPlayersData, IPlayer } from '../types/interfaces';
 
 export class ChromeStorage {
-  static async SavePlayersToStorage(playersFromPage: IPlayersData): Promise<boolean> {
+  static async savePlayersToStorage(playersFromPage: IPlayersData): Promise<boolean> {
     try {
       await chrome.storage.local.set({
-        [STORAGE_KEYS.PLAYER_DATA]: JSON.stringify(playersFromPage),
+        [storageKeys.PLAYER_DATA]: JSON.stringify(playersFromPage),
       });
     } catch (e) {
       console.error('Błąd podczas zapisu do chrome.storage: ', e);
@@ -14,25 +14,8 @@ export class ChromeStorage {
     return true;
   }
 
-  static async GetDataFromStorage(): Promise<IPlayersData | null> {
-    try {
-      const result = await chrome.storage.local.get([STORAGE_KEYS.PLAYER_DATA]);
-
-      return JSON.parse(result[STORAGE_KEYS.PLAYER_DATA]);
-    } catch (e) {
-      console.error('Błąd podczas odczytu z chrome.storage: ', e);
-      return null;
-    }
-
-    // Aby pobrać dane z chrome.storage.local:
-    // chrome.storage.local.get(null, function(items) {
-    // 	console.log(items);
-    // });
-    // null oznacza: pobierz wszystkie dane.
-  }
-
-  static async GetPlayerByName(playerName: string): Promise<IPlayer | undefined> {
-    return await this.GetDataFromStorage()
+  static async getPlayerByName(playerName: string): Promise<IPlayer | undefined> {
+    return await this.getDataFromStorage<IPlayersData>(storageKeys.PLAYER_DATA)
       .then((storageData) => storageData?.players.find((player) => player.name == playerName))
       .catch((e) => {
         console.error('Błąd podczas odczytu z chrome.storage: ', e);
@@ -49,6 +32,32 @@ export class ChromeStorage {
   //     return undefined;
   //   }
   // }
+
+  static async getDataFromStorage<T>(storageKey: string): Promise<T | null> {
+    try {
+      const result = await chrome.storage.local.get([storageKey]);
+      return JSON.parse(result[storageKey]);
+    } catch (e) {
+      console.error('Błąd podczas odczytu z chrome.storage: ', e);
+      return null;
+    }
+
+    // Aby pobrać dane z chrome.storage.local:
+    // chrome.storage.local.get(null, function(items) {
+    // 	console.log(items);
+    // });
+    // null oznacza: pobierz wszystkie dane.
+  }
+
+  static async saveDataToStorage<T>(storageKey: string, data: T): Promise<boolean> {
+    try {
+      await chrome.storage.local.set({ [storageKey]: JSON.stringify(data) });
+    } catch (e) {
+      console.error('Błąd podczas zapisu do chrome.storage: ', e);
+      return false;
+    }
+    return true;
+  }
 }
 
 // cos z ChataGpt

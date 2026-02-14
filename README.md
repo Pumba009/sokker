@@ -18,7 +18,6 @@ W folderze projektu uruchom:
 
 npm install
 
-
 To zainstaluje wszystkie wymagane paczki z pliku package.json do folderu node_modules.
 
 🏗️ Budowanie rozszerzenia
@@ -26,7 +25,6 @@ To zainstaluje wszystkie wymagane paczki z pliku package.json do folderu node_mo
 Zbuduj projekt (np. z TypeScript do JavaScript) poleceniem:
 
 npm run build
-
 
 ⚠️ Upewnij się, że w package.json masz zdefiniowany skrypt "build"
 np. "build": "tsc" lub "build": "vite build" / "webpack --mode production"
@@ -38,7 +36,6 @@ Po wykonaniu komendy powinien się pojawić folder z gotową paczką (np. /dist 
 Otwórz Chrome i przejdź do strony:
 
 chrome://extensions/
-
 
 Włącz Tryb deweloperski (prawy górny róg).
 

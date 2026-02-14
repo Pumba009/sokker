@@ -1,35 +1,40 @@
 import { PlayerHelper } from '../utils/player_helper';
 import { IPlayer } from '../types/interfaces';
-import { MyChart } from '../components/my_chart';
+import { TrainingChartReport } from '../components/training_chart_report';
+import { TrainingTableReport } from '../components/training_report/training_table_report';
 
 export class ChartManager<T extends IPlayer> {
-  private data: T;
-  private myChart: MyChart;
+  private _data: T;
+  private _trainingChartReport: TrainingChartReport;
+  private _trainingTableReport: TrainingTableReport<T>;
 
   constructor(data: T) {
-    this.data = data;
-    this.myChart = new MyChart();
+    this._data = data;
+    this._trainingChartReport = new TrainingChartReport();
+    this._trainingTableReport = new TrainingTableReport(data);
   }
 
-  public CreateChart() {
-    this.myChart.createChart(this.getPlayerStatsByAttribute('1'));
+  public createChart() {
+    // const playersStats = this.getPlayerStatsByAttribute('1'); // 1 = kondycja
+    // this._trainingChartReport.createChart(playersStats);
+    this._trainingTableReport.renderTrainingReportOnPage();
   }
 
-  public PopulateChart(playerAttributeId: string, labelName: string) {
+  public populateChart(playerAttributeId: string, labelName: string) {
     const playerStats = this.getPlayerStatsByAttribute(playerAttributeId);
-    this.myChart.UpdateChart(labelName, playerStats);
+    this._trainingChartReport.updateChart(labelName, playerStats);
   }
 
   private getPlayerStatsByAttribute(playerAttributeInNumber: string): {
     xValues: string[];
     yValues: number[];
   } {
-    const playerAttribute = PlayerHelper.DecodePlayerAttribute(playerAttributeInNumber);
-    const xValues: string[] = this.data.updateDateTime.map((date) =>
+    const playerAttribute = PlayerHelper.decodePlayerAttribute(playerAttributeInNumber);
+    const xValues: string[] = this._data.updateDateTime.map((date) =>
       new Date(date).toLocaleDateString(),
     );
-    const yValues: number[] = this.data.progressHistory.flatMap((stat) => stat[playerAttribute]);
-    this.data.progressHistory.flatMap((stat) => console.log(stat));
+    const yValues: number[] = this._data.progressHistory.flatMap((stat) => stat[playerAttribute]);
+    //this._data.progressHistory.flatMap((stat) => console.log(stat));
 
     return { xValues, yValues };
   }

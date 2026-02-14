@@ -1,7 +1,7 @@
-import { WEEK_IN_MILISECONDS } from '../constants';
+import { weekInMs } from '../constants';
 
 export class DateHelper {
-  static GetUpdateThursday() {
+  static getUpdateThursday() {
     const today = new Date();
     today.setUTCHours(8, 0, 0, 0);
     const date = today.getDate(); // numer dnia w miesiącu np 28
@@ -14,10 +14,10 @@ export class DateHelper {
     return today.toISOString(); // czwartek - '2025-10-02T08:00:00.000Z'
   }
 
-  static ShouldUpdateStorage(lastUpdateDayFromLocalStorage: string) {
+  static shouldUpdateStorage(lastUpdateDayFromLocalStorage: string) {
     // lastUpdateDayFromLocalStorage = '2025-10-02T08:00:00.000Z'
     const lastUpdateThrusday = new Date(lastUpdateDayFromLocalStorage); // lastUpdateThrusday = '2025-10-02T08:00:00.000'
-    const updateThrusday = new Date(this.GetUpdateThursday()); // 2025-10-02T06:00:00.000Z
+    const updateThrusday = new Date(this.getUpdateThursday()); // 2025-10-02T06:00:00.000Z
     const now = new Date();
 
     if (updateThrusday.getTime() > lastUpdateThrusday.getTime()) {
@@ -31,7 +31,7 @@ export class DateHelper {
 
   static getDaysToUpdate(lastUpdateDate: Date, today: Date) {
     const diff = today.getTime() - lastUpdateDate.getTime();
-    return new Date(WEEK_IN_MILISECONDS - diff).getDate() - 1;
+    return new Date(weekInMs - diff).getDate() - 1;
   }
 }
 

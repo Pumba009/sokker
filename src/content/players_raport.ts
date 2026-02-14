@@ -27,9 +27,9 @@ waitForElement('.table__root tbody', async (elem) => {
 });
 
 async function getPlayerFromPageAndUpdateStorage(tableRows: HTMLElement) {
-  const playersFromPage = PageHelper.GetPlayersStatsFromPage(tableRows);
+  const playersFromPage = PageHelper.getPlayersStatsFromPage(tableRows);
   console.log(playersFromPage);
-  const sotrageManager: StorageManager = await StorageManager.Create();
+  const sotrageManager: StorageManager = await StorageManager.create();
 
-  sotrageManager.UpdateRaport(playersFromPage);
+  sotrageManager.updateRaport(playersFromPage);
 }

@@ -1,18 +1,22 @@
 {
   "name": "sokkerplusv2",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "test": "jest",
     "dev": "vite",
     "build:content_player_stats": "vite build --config vite.content_player_stats.config.ts",
     "build:content_players_raport": "vite build --config vite.content_players_raport.config.ts",
+    "build:content_player_info": "vite build --config vite.content_player_info.config.ts",
+    "build:content_friendly_invitation": "vite build --config vite.content_friendly_invitation.config.ts",
+    "build:content_login": "vite build --config vite.content_login.config.ts",
     "build:background": "vite build --config vite.background.config.ts",
-    "copy": "copy manifest.json dist\\manifest.json && copy src\\popup\\popup.html dist\\popup\\popup.html && copy src\\popup\\styles.css dist\\popup\\styles.css",
-    "build": "npm run build:content_player_stats && npm run build:content_players_raport && npm run build:background && npm run copy",
+    "copy": "copy manifest.json dist\\manifest.json && copy src\\popup\\popup.html dist\\popup\\popup.html && copy src\\popup\\styles.css dist\\popup\\styles.css && copy src\\content\\style\\style.css dist\\content\\style.css",
+    "build": "npm run build:content_player_stats && npm run build:content_players_raport && npm run build:content_player_info && npm run build:content_friendly_invitation && npm run build:background && npm run copy",
     "build&tsc": "tsc && vite build",
     "format": "prettier --write .",
-    "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\"",
-    "lint:fix": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix"
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "keywords": [],
   "author": "",

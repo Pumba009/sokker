@@ -1,22 +1,26 @@
+import { IPlayerStats } from './types/interfaces';
+
 // klucze do storage
-export const STORAGE_KEYS = {
+export const storageKeys = {
   PLAYER_DATA: 'PlayersData',
-};
+  CREDENTIALS: 'Credentials',
+} as const;
 
 // nazwy alarmów
-export const ALARMS = {
-  //WEEKLY: 'weeklyData',
+export const action = {
   SAVE_PLAYERS: 'savePlayers',
   GET_PLAYERS: 'getPlayers',
   GET_PLAYER_BY_NAME: 'getPlayersByName',
-};
 
-// inne globalne wartości
-export const ONE_WEEK_MS = 1000 * 60 * 60 * 24 * 7;
+  SAVE_CREDENTIALS: 'saveCredentials',
+  GET_CREDENTIALS: 'getCredentials',
 
-export const WEEK_IN_MILISECONDS = 604800000;
+  //WEEKLY: 'weeklyData',
+} as const;
 
-export const PLAYER_ATTRIBUTES: { key: string; value: number }[] = [
+export const weekInMs = 604800000;
+
+export const playerAttributes: { key: string; value: number }[] = [
   { key: 'Kondycja', value: 1 },
   { key: 'Gra na bramce', value: 2 },
   { key: 'Rozgrywanie', value: 3 },
@@ -26,7 +30,7 @@ export const PLAYER_ATTRIBUTES: { key: string; value: number }[] = [
   { key: 'Strzały', value: 7 },
   { key: 'Szybkość', value: 8 },
 ];
-export const GRADING_SCALE: { key: string; value: number }[] = [
+export const gradingScale: { key: string; value: number }[] = [
   { key: 'tragiczna', value: 0 },
   { key: 'beznadziejna', value: 1 },
   { key: 'niedostateczna', value: 2 },
@@ -46,4 +50,26 @@ export const GRADING_SCALE: { key: string; value: number }[] = [
   { key: 'nieziemska', value: 16 },
   { key: 'boska', value: 17 },
   { key: 'nadboska', value: 18 },
+];
+
+export const playerAttributesShortName: { key: string; value: string }[] = [
+  { key: 'stamina', value: 'Kon.' },
+  { key: 'keeper', value: 'Br.' },
+  { key: 'playmaking', value: 'Roz.' },
+  { key: 'passing', value: 'Pod.' },
+  { key: 'technique', value: 'Tech.' },
+  { key: 'defending', value: 'Obr.' },
+  { key: 'striker', value: 'Str.' },
+  { key: 'pace', value: 'Sz.' },
+];
+
+export const playerAttributesMapper: { key: keyof IPlayerStats; value: string }[] = [
+  { key: 'stamina_num', value: 'stamina' },
+  { key: 'keeper_num', value: 'keeper' },
+  { key: 'playmaker_num', value: 'playmaking' },
+  { key: 'pass_num', value: 'passing' },
+  { key: 'technique_num', value: 'technique' },
+  { key: 'defense_num', value: 'defending' },
+  { key: 'striker_num', value: 'striker' },
+  { key: 'speed_num', value: 'pace' },
 ];

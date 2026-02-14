@@ -1,0 +1,93 @@
+.layout__main {
+  --c-text-calendar-day: var(--c-text-calendar-day);
+  --c-bg-compact-menu-hover: var(--c-bg-compact-menu-hover);
+  --c-text-link-2: var(--c-text-link-2);
+  --c-bg-player-age: var(--c-bg-player-age);
+  --header-height: var(--header-height);
+  --c-legend-warm-1: var(--c-legend-warm-1);
+  --c-legend-warm-4: var(--c-legend-warm-4);
+  --c-bg-scrollbar: var(--c-bg-scrollbar);
+  --c-league-bg-promote-3: var(--c-league-bg-promote-3);
+  --c-icon-transparent-2: var(--c-icon-transparent-2);
+  --c-training: var(--c-training);
+  --c-text-search-bar: var(--c-text-search-bar);
+  --c-border-icon: var(--c-border-icon);
+  --c-transfer: var(--c-transfer);
+  --bs-card: var(--bs-card);
+  --c-text-light: var(--c-text-light);
+  --c-error: var(--c-error);
+  --c-legend-warm-3: var(--c-legend-warm-3);
+  --c-input-bg3: var(--c-input-bg3);
+  --c-base: var(--c-base);
+  --c-text-link-3: var(--c-text-link-3);
+  /* ... i tak dalej dla wszystkich zmiennych --c-* */
+}
+
+.table__root {
+  accent-color: auto;
+  align-content: normal;
+  align-items: normal;
+  align-self: auto;
+  animation: none;
+  animation-composition: replace;
+  animation-delay: 0s;
+  animation-direction: normal;
+  animation-duration: 0s;
+  animation-fill-mode: none;
+  animation-iteration-count: 1;
+  animation-name: none;
+  animation-play-state: running;
+  animation-timing-function: ease;
+  appearance: none;
+  backdrop-filter: none;
+  backface-visibility: visible;
+  background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box;
+  background-attachment: scroll;
+  background-blend-mode: normal;
+  background-clip: border-box;
+  background-color: rgba(0, 0, 0, 0);
+  background-image: none;
+  background-origin: padding-box;
+  background-position: 0% 0%;
+  background-repeat: repeat;
+  background-size: auto;
+  block-size: 1152px;
+  border: 0px none rgb(162, 190, 233);
+  border-collapse: collapse;
+  border-radius: 0px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: rgb(162, 190, 233);
+  cursor: auto;
+  display: table;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  font:
+    12px / 16px 'Nunito Sans',
+    Arial,
+    sans-serif;
+  font-family: 'Nunito Sans', Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  height: 1152px;
+  inline-size: 1023.14px;
+  justify-content: normal;
+  line-height: 16px;
+  margin: 10px;
+  opacity: 1;
+  overflow: visible;
+  padding: 10px;
+  position: static;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  vertical-align: baseline;
+  visibility: visible;
+  width: auto;
+  z-index: auto;
+  /* transformacje i transition */
+  transform: none;
+  transform-origin: 511.57px 576px;
+  transition: all 0s ease;
+}

@@ -1,0 +1,106 @@
+3️⃣ W content script – poczekać na DOM strony
+
+(najczystsze rozwiązanie)
+```
+manifest.json
+{
+  "content_scripts": [{
+    "matches": ["https://example.com/*"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }]
+}
+```
+content.js
+```
+console.log('DOM strony gotowy');
+```
+📌 document_idle = DOM gotowy + większość zasobów wczytana
+📌 Najlepsze miejsce do manipulacji stroną
+
+
+"run_at": "document_idle" to moment wstrzyknięcia content scriptu w rozszerzeniu Chrome.
+Wyjaśnię dokładnie, co to znaczy, kiedy się uruchamia i czym różni się od innych opcji.
+
+
+📌 Co to w ogóle jest run_at?
+
+run_at określa KIEDY Chrome uruchomi content script względem cyklu ładowania strony.
+
+```
+"content_scripts": [{
+  "matches": ["https://example.com/*"],
+  "js": ["content.js"],
+  "run_at": "document_idle"
+}]
+```
+
+🕒 Co znaczy dokładnie document_idle?
+
+✅ W praktyce:
+
+- Uruchom content script, gdy:
+- DOM jest już gotowy
+- parser HTML skończył
+- większość zasobów (CSS, JS) została załadowana
+- przeglądarka jest „bezczynna”
+
+📌 To jest najpóźniejszy i najbezpieczniejszy moment.
+
+
+🧠 Jak Chrome decyduje?
+
+Chrome:
+
+1. czeka na DOMContentLoaded
+2. czeka aż JS strony przestanie intensywnie pracować
+3. wstrzykuje content script
+
+Nie ma dokładnego timestampu — to heurystyka.
+
+🧪 Porównanie wszystkich run_at
+
+| run_at              | Kiedy        | Co jest dostępne |
+| ------------------- | ------------ | ---------------- |
+| `document_start`    | przed HTML   | ❌ brak DOM       |
+| `document_end`      | po HTML      | ✔ DOM, ❌ zasoby  |
+| **`document_idle`** | po wszystkim | ✔ DOM + JS       |
+
+
+📌 Kiedy używać document_idle?
+✔ manipulujesz DOM
+✔ pracujesz ze SPA
+✔ nie chcesz race condition
+✔ chcesz mieć pewność, że elementy już są
+
+👉 domyślna i polecana opcja
+
+❗ Dlaczego document_idle jest ważne dla SPA?
+
+SPA:
+
+- DOM ładuje się
+- potem JS dynamicznie go zmienia
+
+document_idle:
+
+- daje Ci punkt startowy
+- potem używasz MutationObserver
+
+    DOMContentLoaded = „HTML gotowy”
+    document_idle = „aplikacja w miarę wystartowała”
+
+
+🧩 Co document_idle NIE gwarantuje
+
+❌ że konkretny element już istnieje
+❌ że aplikacja SPA skończyła renderować
+```
+run_at: "document_idle"
++ waitForElement(...)
+```
+
+
+🧠 Jedno zdanie do notatek
+
+document_idle oznacza, że Chrome uruchamia content script po zakończeniu ładowania DOM i większości zasobów, gdy strona jest w stanie bezczynności.

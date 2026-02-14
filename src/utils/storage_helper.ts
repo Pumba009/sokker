@@ -1,23 +1,37 @@
 import { IPlayersData, IPlayer } from '../types/interfaces';
-import { ALARMS } from '../constants';
+import { action } from '../constants';
 
-export async function LoadPlayersFromStorageViaMassage(): Promise<IPlayersData> {
+export async function loadPlayersStatsFromStorageViaMassage(): Promise<IPlayersData> {
   return chrome.runtime.sendMessage({
-    action: ALARMS.GET_PLAYERS,
+    action: action.GET_PLAYERS,
   });
 }
 
-export async function LoadPlayerByNameFromStorage(playerName: string): Promise<IPlayer> {
+export async function loadPlayerStatsFromStorage(playerName: string): Promise<IPlayer> {
   return chrome.runtime.sendMessage({
-    action: ALARMS.GET_PLAYER_BY_NAME,
+    action: action.GET_PLAYER_BY_NAME,
     payload: playerName,
   });
 }
 
-export async function SavePlayersToStorageViaMassage(playersToLolcalStorage: IPlayersData) {
+export async function savePlayersStatsToStorageViaMassage(playersToLolcalStorage: IPlayersData) {
   chrome.runtime.sendMessage({
-    action: ALARMS.SAVE_PLAYERS,
+    action: action.SAVE_PLAYERS,
     payload: playersToLolcalStorage,
   });
   console.log('📦 Save Players using background: ', playersToLolcalStorage);
 }
+
+// export async function LoadCredentialsFromStorageViaMassage(): Promise<ICredentials> {
+//   return chrome.runtime.sendMessage({
+//     action: action.GET_CREDENTIALS,
+//   });
+// }
+
+// export async function SaveCredentialsFromStorageViaMassage(data: ICredentials) {
+//   // : Promise<boolean>
+//   return chrome.runtime.sendMessage({
+//     action: action.SAVE_CREDENTIALS,
+//     payload: data,
+//   });
+// }

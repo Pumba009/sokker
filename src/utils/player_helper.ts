@@ -1,7 +1,7 @@
 import { IPlayerStats } from '../types/interfaces';
 
 export class PlayerHelper {
-  static DecodePlayerAttribute(playerAttributeInNumber: string): keyof IPlayerStats {
+  static decodePlayerAttribute(playerAttributeInNumber: string): keyof IPlayerStats {
     switch (playerAttributeInNumber) {
       case '1':
         return 'stamina_num';
@@ -25,7 +25,7 @@ export class PlayerHelper {
   }
 }
 
-export function GetPlayerNameFromPage() {
+export function getPlayerNameFromPage() {
   return document
     .getElementsByClassName('panel-heading')[0]
     .children[1].getElementsByTagName('a')[0].text;

@@ -1,17 +1,20 @@
-import { ReportType } from './model/raport_type';
-import { IPlayer } from '../../types/interfaces';
-import { playerAttributesShortName, playerAttributesMapper } from '../../constants';
+import { IPlayerDetails } from '../../types/interfaces';
+import { playerSkillNameMapper, playerProgressTableHeaders } from '../../constants';
 
-export class TrainingTableReport<T extends IPlayer> {
+export class TrainingTableReport<T extends IPlayerDetails> implements ITrainingReport {
   private _playerData: T;
 
-  public constructor(playerProgressHistory: T) {
-    this._playerData = playerProgressHistory;
+  public constructor(playerDetails: T) {
+    this._playerData = playerDetails;
   }
 
-  public renderTrainingReportOnPage(raportType: ReportType = ReportType.Table) {
-    console.log(raportType);
+  public renderTrainingReportOnPage() {
     this.createTable();
+  }
+
+  public deleteReport() {
+    const element = document.querySelector('.layout__main') as HTMLElement | null;
+    element?.remove();
   }
 
   private createTable() {
@@ -27,29 +30,42 @@ export class TrainingTableReport<T extends IPlayer> {
     tableDiv.className = 'is-sticky';
     tableRoot.className = 'table__root';
 
+    //thead
     const thead: HTMLTableSectionElement = tableRoot.createTHead();
-    const row: HTMLTableRowElement = thead.insertRow();
-    row.appendChild(this.addHead({ key: 'data', value: 'data' }));
-    playerAttributesShortName.forEach((playerAttributeKeyValuePair) => {
-      row.appendChild(this.addHead(playerAttributeKeyValuePair));
+    const rowThead: HTMLTableRowElement = thead.insertRow();
+    rowThead.appendChild(this.addHead({ key: 'data', value: 'data' }));
+    playerProgressTableHeaders.forEach((headerName) => {
+      rowThead.appendChild(this.addHead(headerName));
     });
 
+    //tbody
     const tbody: HTMLTableSectionElement = tableRoot.createTBody();
-    let weekIndex = this._playerData.progressHistory.length - 1;
-    for (weekIndex; weekIndex >= 0; weekIndex--) {
-      const row: HTMLTableRowElement = tbody.insertRow();
-      this.addFirstCell(row, this._playerData.updateDateTime[weekIndex].split('T')[0]);
-
-      const playerStats = this._playerData.progressHistory[weekIndex];
-      playerAttributesMapper.forEach((playerAttributesMapper) => {
-        this.addCell(
-          row,
-          playerAttributesMapper.value,
-          playerStats[playerAttributesMapper.key].toString(),
-          weekIndex,
+    let index = this._playerData.trainingHistory.length - 1;
+    const playersTraningHistory = [...this._playerData.trainingHistory].reverse();
+    playersTraningHistory.forEach((trainingHistory) => {
+      const rowTbody: HTMLTableRowElement = tbody.insertRow();
+      this.addFirstCell(rowTbody, trainingHistory.updateDateTime.split('T')[0]);
+      playerSkillNameMapper.forEach((skillNameMapper) => {
+        this.addSkillsCell(
+          rowTbody,
+          skillNameMapper.value,
+          trainingHistory.playerStats[skillNameMapper.key].toString(),
+          index,
         );
       });
-    }
+      index--;
+      console.log(trainingHistory);
+      this.addTrainingDetailCell(
+        rowTbody,
+        'trainingType',
+        trainingHistory.trainingDetails?.trainingType,
+      );
+      this.addTrainingDetailCell(
+        rowTbody,
+        'effectivePercentage',
+        trainingHistory.trainingDetails?.effectivePercentage,
+      );
+    });
 
     tableDiv.appendChild(tableRoot);
     trainingDiv.appendChild(tableDiv);
@@ -96,49 +112,57 @@ export class TrainingTableReport<T extends IPlayer> {
     cell.appendChild(wrapedDiv);
   }
 
-  private addCell(
+  private addSkillsCell(
     row: HTMLTableRowElement,
-    playerAttributeName: string,
-    playerAttributeValue: string,
+    playerSkillName: string,
+    playerSkillValue: string,
     index: number,
   ) {
     const cell: HTMLTableCellElement = row.insertCell();
-    cell.className = `table__cell table__cell--${playerAttributeName}`;
+    cell.className = `table__cell table__cell--${playerSkillName}`;
     const wrapedDiv = document.createElement('div');
     wrapedDiv.className = 'table__cell-wrap table__cell-wrap--border-left';
     const span = document.createElement('span');
     const wrapedSpan = document.createElement('span');
-    wrapedSpan.className = this.colorCell(playerAttributeName, playerAttributeValue, index);
-    wrapedSpan.textContent = playerAttributeValue;
+    wrapedSpan.className = this.colorCell(playerSkillName, playerSkillValue, index);
+    wrapedSpan.textContent = playerSkillValue;
 
     span.appendChild(wrapedSpan);
     wrapedDiv.appendChild(span);
     cell.appendChild(wrapedDiv);
   }
 
-  private colorCell(
-    playerAttributeName: string,
-    playerAttributeValue: string,
-    index: number,
-  ): string {
+  private colorCell(playerSkillName: string, playerSkillValue: string, index: number): string {
     index = index - 1;
     if (index <= 0) {
       return 'growth-bg';
     }
 
-    const lastWeekPlayerAttributes = this._playerData.progressHistory[index];
-    const attribute = playerAttributesMapper.find((kv) => kv.value == playerAttributeName)!.key; //[playerAttributeName as keyof IPlayerStats];
-    const lastWeekAttributeValue = lastWeekPlayerAttributes[attribute];
+    const lastWeekPlayerTraining = this._playerData.trainingHistory[index].playerStats;
+    const skillName = playerSkillNameMapper.find((kv) => kv.value == playerSkillName)!.key; //[playerAttributeName as keyof IPlayerAtributes];
 
-    const playerAttributeValueNum = Number(playerAttributeValue);
-    if (lastWeekAttributeValue == playerAttributeValueNum) {
-      return 'growth-bg';
-    }
+    const lastWeekSkillValue = lastWeekPlayerTraining[skillName];
+    const playerSkillValueNum = Number(playerSkillValue);
 
-    if (lastWeekAttributeValue < playerAttributeValueNum) {
-      return 'growth-bg growth-bg--up';
-    }
+    if (lastWeekSkillValue == playerSkillValueNum) return 'growth-bg';
+
+    if (lastWeekSkillValue < playerSkillValueNum) return 'growth-bg growth-bg--up';
 
     return 'growth-bg growth-bg--down';
+  }
+
+  private addTrainingDetailCell(row: HTMLTableRowElement, description: string, value: string) {
+    const cell: HTMLTableCellElement = row.insertCell();
+    cell.className = `table__cell table__cell--${description}`;
+    const wrapedDiv = document.createElement('div');
+    wrapedDiv.className = 'table__cell-wrap table__cell-wrap--border-left';
+    const span = document.createElement('span');
+    const wrapedSpan = document.createElement('span');
+    wrapedSpan.className = 'growth-bg';
+    wrapedSpan.textContent = value;
+
+    span.appendChild(wrapedSpan);
+    wrapedDiv.appendChild(span);
+    cell.appendChild(wrapedDiv);
   }
 }

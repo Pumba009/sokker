@@ -14,13 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
       chrome.tabs.create({ url: this.href }); // otwiera link w nowej karcie
     });
   }
-
-  // const buttonInput = document.querySelector<HTMLInputElement>('#button'); //HTMLButtonElement
-
-  // console.log(buttonInput);
-  // if (buttonInput) {
-  //   buttonInput.addEventListener('click', SaveCredentialsToStorage);
-  // }
 });
 
 function importPlayers(event: Event) {

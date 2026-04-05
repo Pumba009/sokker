@@ -1,4 +1,4 @@
-import { IPlayer, IPlayersData } from '../types/interfaces';
+import { IPlayerDetails, IPlayersData, IPlayersPage } from '../types/interfaces';
 import { Player } from '../types/player';
 import { DateHelper } from '../utils/date_helper';
 import {
@@ -16,17 +16,16 @@ export class StorageManager implements IStorageManager {
 
   static async create() {
     const players = await loadPlayersStatsFromStorageViaMassage();
+    console.log(players);
     return new StorageManager(players);
   }
 
-  public async updateRaport(playersFromPage: IPlayer[]) {
+  public async updateRaport(playersFromPage: IPlayersPage[]) {
     if (this._playersFromStorage == null) {
-      console.log('Storage is empty. Adding players to storage for the First Time!');
-      return await this.addToStorage(playersFromPage);
+      return await this.addAllPlayersFirstTime(playersFromPage);
     }
 
     if (DateHelper.shouldUpdateStorage(this._playersFromStorage.lastUpdateDay)) {
-      console.log('It is update day!');
       return await this.updateAllPlayers(playersFromPage, this._playersFromStorage);
     }
 
@@ -34,26 +33,44 @@ export class StorageManager implements IStorageManager {
     return;
   }
 
-  private async updateAllPlayers(playersStatsFromPage: IPlayer[], dataFromStorage: IPlayersData) {
-    const temporaryPlayers: IPlayer[] = [];
+  private async addAllPlayersFirstTime(playersFromPage: IPlayersPage[]) {
+    console.log('Storage is empty. Adding players to storage for the First Time!');
+    const players: Player[] = [];
+    for (const playerFromPage of playersFromPage) {
+      const player = new Player();
+      player.updatePlayerTrainingHistory(playerFromPage);
+      players.push(player);
+    }
+
+    return await this.saveToStorage(players);
+  }
+
+  private async updateAllPlayers(
+    playersStatsFromPage: IPlayersPage[],
+    dataFromStorage: IPlayersData,
+  ) {
+    console.log('It is update day!');
+    const temporaryPlayers: IPlayerDetails[] = [];
     const playersFromStorage = dataFromStorage.players;
     let playerStatsFromStorage;
 
     for (const playerFromPage of playersStatsFromPage) {
       playerStatsFromStorage = this.getPlayerByName(playerFromPage.name, playersFromStorage);
       if (playerStatsFromStorage) {
-        playerStatsFromStorage.updatePlayerStatistic(playerFromPage);
+        playerStatsFromStorage.updatePlayerTrainingHistory(playerFromPage);
         temporaryPlayers.push(playerStatsFromStorage);
       } else {
         console.log(playerFromPage.name + ' do not exists in Storage!');
-        temporaryPlayers.push(playerFromPage);
+        const player = new Player();
+        player.updatePlayerTrainingHistory(playerFromPage);
+        temporaryPlayers.push(player);
       }
     }
 
-    return await this.addToStorage(temporaryPlayers);
+    return await this.saveToStorage(temporaryPlayers);
   }
 
-  private async addToStorage(players: IPlayer[]) {
+  private async saveToStorage(players: IPlayerDetails[]) {
     const playersToLolcalStorage = {
       lastUpdateDay: DateHelper.getUpdateThursday(),
       players: players,
@@ -62,7 +79,10 @@ export class StorageManager implements IStorageManager {
     await savePlayersStatsToStorageViaMassage(playersToLolcalStorage);
   }
 
-  private getPlayerByName(playerName: string, playersFromStorage: IPlayer[]): Player | undefined {
+  private getPlayerByName(
+    playerName: string,
+    playersFromStorage: IPlayerDetails[],
+  ): Player | undefined {
     const foundPlayer = playersFromStorage.find((player) => player.name == playerName);
     if (foundPlayer) {
       return new Player(foundPlayer);

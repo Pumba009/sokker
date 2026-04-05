@@ -1,16 +1,49 @@
+import { IPlayerDetails, ITrainingHistory } from '../../types/interfaces';
+import { PlayerHelper } from '../../utils/player_helper';
+import {
+  createPlayerAtrributeSelector,
+  deleteReportSelector,
+} from '../others/player_atrribute_selector';
 import { Chart, ChartConfiguration } from 'chart.js/auto'; // auto - rejestruje wszystko chyba tak samo jak Chart.register(...registerables)
 //import { Chart, ChartConfiguration, registerables} from "chart.js";
 //Chart.register(...registerables); // rejestracja lini, punktow, skali (nowe rozwiazanie w chart.js od wersji 2.0 lub 3.0 - terefere)
 
-export class TrainingChartReport {
+export class TrainingChartReport<T extends IPlayerDetails> implements ITrainingReport {
   private _chartName = 'Training Skills Report';
   private _chart: Chart | null = null;
 
-  public createChart(playerData: { xValues: string[]; yValues: number[] }) {
-    const config = this.getInitialChartConfig(playerData);
+  private _playerData: T;
+
+  public constructor(playerProgressHistory: T) {
+    this._playerData = playerProgressHistory;
+  }
+
+  public renderTrainingReportOnPage() {
+    createPlayerAtrributeSelector((labelName: string, playerAttributeId: string) => {
+      this.updateChart(labelName, playerAttributeId);
+    });
+    this.createChart();
+  }
+
+  public deleteReport(): void {
+    if (this._chart) {
+      this._chart.destroy();
+      this._chart = null;
+    }
+
+    const canvas = document.getElementById(this._chartName) as HTMLCanvasElement | null;
+    canvas?.remove();
+
+    deleteReportSelector();
+  }
+
+  public createChart() {
+    const playerTrainingData = this.getPlayerTrainingDataByAttribute('1'); // 1 = kondycja
+    const config = this.getInitialChartConfig(playerTrainingData);
     const ctx = this.createEmptyCanvas();
     if (!ctx) {
       console.log('Nie znaleziono Canvas');
+      return;
     }
 
     this._chart = new Chart(ctx, config);
@@ -70,12 +103,29 @@ export class TrainingChartReport {
     } as ChartConfiguration;
   }
 
-  public updateChart(labelName: string, playerData: { xValues: string[]; yValues: number[] }) {
-    if (this._chart) {
-      this._chart.data.datasets[0].label = labelName;
-      this._chart.data.datasets[0].data = playerData.yValues;
-      this._chart.update();
+  public updateChart(labelName: string, playerAttributeId: string) {
+    if (!this._chart) {
+      return;
     }
+
+    const playerTrainingData = this.getPlayerTrainingDataByAttribute(playerAttributeId);
+    this._chart.data.datasets[0].label = labelName;
+    this._chart.data.datasets[0].data = playerTrainingData.yValues;
+    this._chart.update();
+  }
+
+  private getPlayerTrainingDataByAttribute(playerAttributeId: string): {
+    xValues: string[];
+    yValues: number[];
+  } {
+    const trainingHistory = this._playerData.trainingHistory as ITrainingHistory[];
+    const xValues: string[] = trainingHistory.map((date) =>
+      new Date(date.updateDateTime).toLocaleDateString(),
+    );
+    const playerAttribute = PlayerHelper.decodePlayerAttribute(playerAttributeId);
+    const yValues: number[] = trainingHistory.flatMap((date) => date.playerStats[playerAttribute]);
+
+    return { xValues, yValues };
   }
 }
 

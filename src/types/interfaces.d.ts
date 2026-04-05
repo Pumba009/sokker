@@ -9,16 +9,28 @@
 //    są napisane w JS, lub
 //    są zewnętrzne (np. @types/lodash).
 
-export interface IPlayersData {
-  lastUpdateDay: string;
-  players: IPlayer[];
-}
-
-export interface IPlayer {
+export interface IPlayersPage {
   id: string;
   name: string;
-  updateDateTime: string[];
-  progressHistory: IPlayerStats[];
+  playerStats: IPlayerStats;
+  trainingDetails: ITrainingDetails;
+}
+
+export interface IPlayersData {
+  lastUpdateDay: string;
+  players: IPlayerDetails[];
+}
+
+export interface IPlayerDetails {
+  id: string;
+  name: string;
+  trainingHistory: ITrainingHistory[];
+}
+
+export interface ITrainingHistory {
+  updateDateTime: string;
+  playerStats: IPlayerStats;
+  trainingDetails: ITrainingDetails;
 }
 
 export interface IPlayerStats {
@@ -32,11 +44,7 @@ export interface IPlayerStats {
   technique_num: number;
 }
 
-// declare class Player implements IPlayer {
-//   id: string;
-//   name: string;
-//   updateDateTime: Date[];
-//   progressHistory: number[];
-
-//   updatePlayerStatistic(playerFromPage: IPlayer): this;
-// }
+export interface ITrainingDetails {
+  trainingType: string;
+  effectivePercentage: string;
+}

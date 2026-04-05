@@ -1,9 +1,8 @@
-import { IPlayerStats, IPlayer } from '../types/interfaces';
-import { DateHelper } from '../utils/date_helper';
+import { IPlayerStats, IPlayersPage, ITrainingDetails } from '../types/interfaces';
 
 export class PageHelper {
-  static getPlayersStatsFromPage(tableRows: HTMLElement): IPlayer[] {
-    const players: IPlayer[] = [];
+  static getPlayersStatsFromPage(tableRows: HTMLElement): IPlayersPage[] {
+    const players: IPlayersPage[] = [];
 
     const rows = tableRows.querySelectorAll<HTMLTableRowElement>('tr.table-row');
     rows.forEach((row) => {
@@ -13,7 +12,7 @@ export class PageHelper {
     return players;
   }
 
-  private static GetPlayersSkillsFromPage(tableRow: HTMLTableRowElement): IPlayer {
+  private static GetPlayersSkillsFromPage(tableRow: HTMLTableRowElement): IPlayersPage {
     const playerName = getPlayersName(tableRow);
 
     const stats: IPlayerStats = {
@@ -27,12 +26,17 @@ export class PageHelper {
       striker_num: getPlayersData(tableRow.cells[13]), //striker_num
     };
 
+    const trainingDetails = {
+      trainingType: getTrainingType(tableRow.cells[18]),
+      effectivePercentage: getTrainingEff(tableRow.cells[21]),
+    } as ITrainingDetails;
+
     return {
       id: tableRow.dataset.rowId ?? '',
       name: playerName,
-      updateDateTime: [DateHelper.getUpdateThursday()],
-      progressHistory: [stats],
-    } as IPlayer;
+      playerStats: stats,
+      trainingDetails: trainingDetails,
+    } as IPlayersPage;
 
     function getPlayersData(cell: HTMLTableCellElement): number {
       const playerData = parseInt(cell?.childNodes[0]?.childNodes[0]?.textContent ?? '');
@@ -48,6 +52,14 @@ export class PageHelper {
       const anchor = tableRow.cells[1]?.querySelector('a'); //cells[0] - flaga,  cells[1] - name;
       const playerName = anchor?.textContent?.trim();
       return playerName;
+    }
+
+    function getTrainingType(cell: HTMLTableCellElement): string {
+      return cell?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.textContent ?? '';
+    }
+
+    function getTrainingEff(cell: HTMLTableCellElement): string {
+      return cell?.childNodes[0]?.textContent ?? '';
     }
   }
 }

@@ -52,7 +52,7 @@ export const gradingScale: { key: string; value: number }[] = [
   { key: 'nadboska', value: 18 },
 ];
 
-export const playerAttributesShortName: { key: string; value: string }[] = [
+export const playerSkillShortName: { key: string; value: string }[] = [
   { key: 'stamina', value: 'Kon.' },
   { key: 'keeper', value: 'Br.' },
   { key: 'playmaking', value: 'Roz.' },
@@ -63,7 +63,7 @@ export const playerAttributesShortName: { key: string; value: string }[] = [
   { key: 'pace', value: 'Sz.' },
 ];
 
-export const playerAttributesMapper: { key: keyof IPlayerStats; value: string }[] = [
+export const playerSkillNameMapper: { key: keyof IPlayerStats; value: string }[] = [
   { key: 'stamina_num', value: 'stamina' },
   { key: 'keeper_num', value: 'keeper' },
   { key: 'playmaker_num', value: 'playmaking' },
@@ -73,3 +73,18 @@ export const playerAttributesMapper: { key: keyof IPlayerStats; value: string }[
   { key: 'striker_num', value: 'striker' },
   { key: 'speed_num', value: 'pace' },
 ];
+
+export const trainingDetailsKeyValuePairs: { key: string; value: string }[] = [
+  { key: 'type', value: 'Typ' },
+  { key: 'efe', value: 'Efe' },
+];
+
+export const playerProgressTableHeaders: { key: string; value: string }[] = [
+  ...playerSkillShortName,
+  ...trainingDetailsKeyValuePairs,
+];
+
+export enum ReportView {
+  Table = 'Table',
+  Chart = 'Chart',
+}

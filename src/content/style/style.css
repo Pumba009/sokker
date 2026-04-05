@@ -185,3 +185,7 @@
   color: var(--color-text);
   transition: margin-top 0.2s ease-in-out;
 }
+
+.float-right {
+  float: right;
+}

@@ -2,13 +2,14 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "outDir": "dist",
     "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["node", "chrome", "jest"]
+    "types": ["node", "chrome", "jest"],
+    "ignoreDeprecations": "6.0"
   },
-  "include": ["src", "eslint.config.mjs", "eslint.config.js"]
+  "include": ["src", "tests", "eslint.config.mjs", "eslint.config.js"]
 }

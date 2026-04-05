@@ -1,5 +1,5 @@
 import { storageKeys } from '../constants';
-import { IPlayersData, IPlayer } from '../types/interfaces';
+import { IPlayersData, IPlayerDetails } from '../types/interfaces';
 
 export class ChromeStorage {
   static async savePlayersToStorage(playersFromPage: IPlayersData): Promise<boolean> {
@@ -14,7 +14,7 @@ export class ChromeStorage {
     return true;
   }
 
-  static async getPlayerByName(playerName: string): Promise<IPlayer | undefined> {
+  static async getPlayerByName(playerName: string): Promise<IPlayerDetails | undefined> {
     return await this.getDataFromStorage<IPlayersData>(storageKeys.PLAYER_DATA)
       .then((storageData) => storageData?.players.find((player) => player.name == playerName))
       .catch((e) => {
@@ -22,16 +22,6 @@ export class ChromeStorage {
         return undefined;
       });
   }
-
-  // static async GetPlayerByName(playerName: string): Promise<IPlayer | undefined> {
-  //   try {
-  //     const storageData: IPlayerData | undefined = await this.GetDataFromStorage();
-  //     return storageData?.players.find(player => player.name === playerName);
-  //   } catch (e) {
-  //     console.error('Błąd podczas odczytu z chrome.storage: ', e);
-  //     return undefined;
-  //   }
-  // }
 
   static async getDataFromStorage<T>(storageKey: string): Promise<T | null> {
     try {

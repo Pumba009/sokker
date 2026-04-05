@@ -10,12 +10,12 @@ describe('DateHelper', () => {
     jest.useRealTimers();
   });
 
-  describe('GetUpdateThursday', () => {
+  describe('getUpdateThursday', () => {
     it('jest sobota 2 dzien po czwartku, zwroc date wtecz 2 dni', () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-10-04T12:21:00.000Z')); // fakujemy date i godzine
 
       const expectedDate = '2025-10-02T08:00:00.000Z'; //czwartek 2 pazdziernika
-      const date = DateHelper.GetUpdateThursday();
+      const date = DateHelper.getUpdateThursday();
 
       expect(expectedDate).toBe(date);
     });
@@ -24,7 +24,7 @@ describe('DateHelper', () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-10-01T12:21:00.000Z')); // fakujemy date i godzine
 
       const expectedDate = '2025-09-25T08:00:00.000Z'; // czwartek 25 wrzesnia (wrzesien ma 30 dni)
-      const date = DateHelper.GetUpdateThursday();
+      const date = DateHelper.getUpdateThursday();
 
       expect(expectedDate).toBe(date);
     });
@@ -33,7 +33,7 @@ describe('DateHelper', () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-10-04T23:21:00.000Z')); //sobota
 
       const expectedDate = '2025-10-02T08:00:00.000Z'; //czwartek 2 pazdziernika
-      const date = DateHelper.GetUpdateThursday();
+      const date = DateHelper.getUpdateThursday();
 
       expect(expectedDate).toBe(date);
     });
@@ -44,7 +44,7 @@ describe('DateHelper', () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-10-04T08:00:00.000Z')); //sobota
 
       const lastUpdateDateFromStorage = '2025-10-02T08:00:00.000Z'; //ostatni zapisany update (data ostatniego updatu)
-      const isUpdateDayToStorage = DateHelper.ShouldUpdateStorage(lastUpdateDateFromStorage);
+      const isUpdateDayToStorage = DateHelper.shouldUpdateStorage(lastUpdateDateFromStorage);
 
       expect(isUpdateDayToStorage).toBeFalsy();
     });
@@ -53,7 +53,7 @@ describe('DateHelper', () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-10-04T08:00:00.000Z')); //sobota
 
       const lastUpdateDateFromStorage = '2025-09-25T08:00:00.000Z'; //ostatni zapisany update (data ostatniego updatu)
-      const isUpdateDayToStorage = DateHelper.ShouldUpdateStorage(lastUpdateDateFromStorage);
+      const isUpdateDayToStorage = DateHelper.shouldUpdateStorage(lastUpdateDateFromStorage);
 
       expect(isUpdateDayToStorage).toBeTruthy();
     });
@@ -62,7 +62,7 @@ describe('DateHelper', () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-10-01T08:00:00.000Z')); //sroda
 
       const lastUpdateDateFromStorage = '2025-09-25T08:00:00.000Z'; //ostatni zapisany update (data ostatniego updatu)
-      const isUpdateDayToStorage = DateHelper.ShouldUpdateStorage(lastUpdateDateFromStorage);
+      const isUpdateDayToStorage = DateHelper.shouldUpdateStorage(lastUpdateDateFromStorage);
 
       expect(isUpdateDayToStorage).toBeFalsy();
     });
@@ -71,7 +71,7 @@ describe('DateHelper', () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-10-01T23:15:00.000Z')); //sroda
 
       const lastUpdateDateFromStorage = '2025-09-25T08:00:00.000Z'; //ostatni zapisany update (data ostatniego updatu)
-      const isUpdateDayToStorage = DateHelper.ShouldUpdateStorage(lastUpdateDateFromStorage);
+      const isUpdateDayToStorage = DateHelper.shouldUpdateStorage(lastUpdateDateFromStorage);
 
       expect(isUpdateDayToStorage).toBeFalsy();
     });
@@ -80,7 +80,7 @@ describe('DateHelper', () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-10-02T08:00:00.000Z')); //czwartek
 
       const lastUpdateDateFromStorage = '2025-09-25T08:00:00.000Z'; //ostatni zapisany update (data ostatniego updatu)
-      const isUpdateDayToStorage = DateHelper.ShouldUpdateStorage(lastUpdateDateFromStorage);
+      const isUpdateDayToStorage = DateHelper.shouldUpdateStorage(lastUpdateDateFromStorage);
 
       expect(isUpdateDayToStorage).toBeTruthy();
     });
@@ -89,7 +89,7 @@ describe('DateHelper', () => {
       jest.useFakeTimers().setSystemTime(new Date('2025-10-02T07:00:00.000Z')); //czwartek
 
       const lastUpdateDateFromStorage = '2025-09-25T08:00:00.000Z'; //ostatni zapisany update (data ostatniego updatu)
-      const isUpdateDayToStorage = DateHelper.ShouldUpdateStorage(lastUpdateDateFromStorage);
+      const isUpdateDayToStorage = DateHelper.shouldUpdateStorage(lastUpdateDateFromStorage);
 
       expect(isUpdateDayToStorage).toBeFalsy();
     });

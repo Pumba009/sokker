@@ -34,23 +34,3 @@ export class DateHelper {
     return new Date(weekInMs - diff).getDate() - 1;
   }
 }
-
-// static ShouldUpdateStorage(lastUpdateDayFromLocalStorage: string){
-//  const lastUpdateDate = new Date(lastUpdateDayFromLocalStorage);
-//   console.log(`from storage: ${lastUpdateDayFromLocalStorage}`);
-//   console.log(`converted from storage: ${lastUpdateDate}`);
-
-//   const now = new Date();
-//   now.setHours(8, 0, 0, 0);
-
-//     console.log(now);
-//     console.log(lastUpdateDate);
-
-//   const diff = now.getTime() - lastUpdateDate.getTime();
-//   console.log(diff);
-
-//   console.log('Days to update: ' + this.getDaysToUpdate(diff));
-
-//   // czy minal tydzien od ostatniego update'u lub czy kolejny czwartek po updatcie
-//   return WEEK_IN_MILISECONDS - diff <= 0;
-// }

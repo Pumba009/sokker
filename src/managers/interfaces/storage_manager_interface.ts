@@ -1,5 +1,5 @@
-import { IPlayer } from '../../types/interfaces';
+import { IPlayersPage } from '../../types/interfaces';
 
 export interface IStorageManager {
-  updateRaport(playersFromPage: IPlayer[]): void;
+  updateRaport(playersFromPage: IPlayersPage[]): void;
 }

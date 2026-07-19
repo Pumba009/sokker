@@ -1,0 +1,29 @@
+name: Testy po wdrożeniu do mastera
+
+on:
+  push:
+    branches:
+      - master # Uruchom, gdy pojawią się nowe commity na gałęzi master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Pobieranie kodu z repozytorium
+        uses: actions/checkout@v4
+
+      - name: 2. Instalacja środowiska Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Wpisz wersję Node, której używasz
+          cache: 'npm' # Automatyczne cache'owanie node_modules (przyspiesza testy)
+
+      - name: 3. Instalacja paczek (node_modules)
+        run: npm ci # 'npm ci' jest szybsze i bezpieczniejsze w CI niż 'npm install'
+
+      # - name: Run ESLint (Opcjonalnie)
+      #   run: npm run lint
+
+      - name: 4. Odpalenie testów Jest
+        run: npm test

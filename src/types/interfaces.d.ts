@@ -10,41 +10,41 @@
 //    są zewnętrzne (np. @types/lodash).
 
 export interface IPlayersPage {
-  id: string;
-  name: string;
-  playerStats: IPlayerStats;
-  trainingDetails: ITrainingDetails;
+    id: string;
+    name: string;
+    playerStats: IPlayerStats;
+    trainingDetails: ITrainingDetails;
 }
 
 export interface IPlayersData {
-  lastUpdateDay: string;
-  players: IPlayerDetails[];
+    lastUpdateDay: string;
+    players: IPlayerDetails[];
 }
 
 export interface IPlayerDetails {
-  id: string;
-  name: string;
-  trainingHistory: ITrainingHistory[];
+    id: string;
+    name: string;
+    trainingHistory: ITrainingHistory[];
 }
 
 export interface ITrainingHistory {
-  updateDateTime: string;
-  playerStats: IPlayerStats;
-  trainingDetails: ITrainingDetails;
+    updateDateTime: string;
+    playerStats: IPlayerStats;
+    trainingDetails: ITrainingDetails;
 }
 
 export interface IPlayerStats {
-  defense_num: number;
-  keeper_num: number;
-  pass_num: number;
-  playmaker_num: number;
-  speed_num: number;
-  stamina_num: number;
-  striker_num: number;
-  technique_num: number;
+    defense_num: number;
+    keeper_num: number;
+    pass_num: number;
+    playmaker_num: number;
+    speed_num: number;
+    stamina_num: number;
+    striker_num: number;
+    technique_num: number;
 }
 
 export interface ITrainingDetails {
-  trainingType: string;
-  effectivePercentage: string;
+    trainingType: string;
+    effectivePercentage: string;
 }

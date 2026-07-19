@@ -1,26 +1,169 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Popup</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="popup-container">
-      <h1>Sokker Extension 👋</h1>
-      <div class="rounded-highlight">
-        <div class="href-to-sokker">
-          <a id="external-link" href="https://sokker.org/pl/app/login/">sokker.org</a>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="styles.css" />
+        <style>
+            body {
+                width: 250px;
+                padding: 15px;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f9f9f9;
+                color: #333;
+                margin: 0;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 2px solid #3498db;
+                padding-bottom: 5px;
+                margin-bottom: 12px;
+            }
+            h3 {
+                margin: 0;
+                color: #2c3e50;
+                font-size: 16px;
+            }
+            #settingsBtn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 18px;
+                padding: 0;
+                line-height: 1;
+                transition: transform 0.2s;
+            }
+            #settingsBtn:hover {
+                transform: rotate(45deg);
+            }
+
+            .view {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                padding: 10px 0;
+            }
+            .hidden {
+                display: none !important;
+            }
+
+            .main-link {
+                text-align: center;
+            }
+            .main-link a {
+                color: #3498db;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 20px;
+            }
+            .main-link a:hover {
+                text-decoration: underline;
+            }
+
+            .sub-link {
+                text-align: left;
+            }
+            .sub-link a {
+                color: #3498db;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 13px;
+            }
+            .sub-link a:hover {
+                text-decoration: underline;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+            }
+            label {
+                font-size: 13px;
+                font-weight: 600;
+                margin-bottom: 4px;
+                color: #555;
+            }
+            input[type='number'] {
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+            input[type='number']:focus {
+                border-color: #3498db;
+            }
+            #status {
+                height: 14px;
+                margin: 0;
+                font-size: 11px;
+                font-weight: bold;
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h3>Sokker Plus</h3>
+                <button id="settingsBtn" title="Ustawienia">⚙️</button>
+            </div>
+
+            <!-- Widok Główny -->
+            <div id="mainView" class="view">
+                <div class="main-link">
+                    <a href="https://sokker.org/pl" id="external-link" target="_blank">Przejdź do Sokker.org</a>
+                </div>
+                <div class="sub-link">
+                    <ul>
+                        <li>
+                            <a
+                                href="https://sokker.org/pl/app/training/main-team-progress/"
+                                id="external-link"
+                                target="_blank"
+                                >Historia treningu</a
+                            >
+                        </li>
+                        <li>
+                            <a href="https://sokker.org/pl/app/season/schedule/" id="external-link" target="_blank"
+                                >Rozgrywki</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://sokker.org/friendlies/action/public_invitations"
+                                id="external-link"
+                                target="_blank"
+                                >Ogłoszenia</a
+                            >
+                        </li>
+                        <li>
+                            <a href="https://sokker.org/arena/teamID/36945" id="external-link" target="_blank"
+                                >Stadion</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Widok Ustawień -->
+            <div id="settingsView" class="view hidden">
+                <div class="form-group">
+                    <label for="threshold">Próg zaproszeń (zł):</label>
+                    <input type="text" id="threshold" class="rounded-highlight" placeholder="20 000 000" />
+                </div>
+                <div class="form-group" style="margin-top: 5px; border-top: 1px solid #ddd; padding-top: 10px">
+                    <label>Baza graczy:</label>
+                    <button id="importBtn" class="rounded-highlight" style="width: 100%; cursor: pointer">
+                        Importuj graczy (.json)
+                    </button>
+                    <input type="file" id="fileInput" accept=".json" style="display: none" />
+                </div>
+                <p id="status" style="color: #27ae60"></p>
+            </div>
         </div>
-      </div>
-      <div class="rounded-highlight">
-        <p>Import Players</p>
-        <input type="file" id="fileInput" />
-      </div>
-    </div>
-    <!-- <span class="pill">Nowa</span>
-    <span class="rounded-box">Status: aktywny</span>
-    <span class="rounded-highlight">Szybkość: 9.8</span> -->
-    <script type="module" src="index.js"></script>
-  </body>
+        <script type="module" src="index.js"></script>
+    </body>
 </html>

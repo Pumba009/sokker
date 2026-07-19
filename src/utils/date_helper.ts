@@ -1,36 +1,35 @@
 import { weekInMs } from '../constants';
 
 export class DateHelper {
-  static getUpdateThursday() {
-    const today = new Date();
-    today.setUTCHours(8, 0, 0, 0);
-    const date = today.getDate(); // numer dnia w miesiącu np 28
-    const dayOfTheWeek = today.getDay(); //0 = niedziela, 1 = poniedziałek, ..., 4 = czwartek
-    const daysToBeSubtracted =
-      dayOfTheWeek > 4 ? dayOfTheWeek - 4 : dayOfTheWeek < 4 ? dayOfTheWeek + 3 : 0; // dni do odliczenia
+    static getUpdateThursday() {
+        const today = new Date();
+        today.setUTCHours(8, 0, 0, 0);
+        const date = today.getDate(); // numer dnia w miesiącu np 28
+        const dayOfTheWeek = today.getDay(); //0 = niedziela, 1 = poniedziałek, ..., 4 = czwartek
+        const daysToBeSubtracted = dayOfTheWeek > 4 ? dayOfTheWeek - 4 : dayOfTheWeek < 4 ? dayOfTheWeek + 3 : 0; // dni do odliczenia
 
-    today.setDate(date - daysToBeSubtracted); // zawsze ustawiaj czwartek
+        today.setDate(date - daysToBeSubtracted); // zawsze ustawiaj czwartek
 
-    return today.toISOString(); // czwartek - '2025-10-02T08:00:00.000Z'
-  }
-
-  static shouldUpdateStorage(lastUpdateDayFromLocalStorage: string) {
-    // lastUpdateDayFromLocalStorage = '2025-10-02T08:00:00.000Z'
-    const lastUpdateThrusday = new Date(lastUpdateDayFromLocalStorage); // lastUpdateThrusday = '2025-10-02T08:00:00.000'
-    const updateThrusday = new Date(this.getUpdateThursday()); // 2025-10-02T06:00:00.000Z
-    const now = new Date();
-
-    if (updateThrusday.getTime() > lastUpdateThrusday.getTime()) {
-      return updateThrusday.getTime() <= now.getTime();
+        return today.toISOString(); // czwartek - '2025-10-02T08:00:00.000Z'
     }
 
-    console.log('Days to update: ' + this.getDaysToUpdate(lastUpdateThrusday, now));
+    static shouldUpdateStorage(lastUpdateDayFromLocalStorage: string) {
+        // lastUpdateDayFromLocalStorage = '2025-10-02T08:00:00.000Z'
+        const lastUpdateThrusday = new Date(lastUpdateDayFromLocalStorage); // lastUpdateThrusday = '2025-10-02T08:00:00.000'
+        const updateThrusday = new Date(this.getUpdateThursday()); // 2025-10-02T06:00:00.000Z
+        const now = new Date();
 
-    return false;
-  }
+        if (updateThrusday.getTime() > lastUpdateThrusday.getTime()) {
+            return updateThrusday.getTime() <= now.getTime();
+        }
 
-  static getDaysToUpdate(lastUpdateDate: Date, today: Date) {
-    const diff = today.getTime() - lastUpdateDate.getTime();
-    return new Date(weekInMs - diff).getDate() - 1;
-  }
+        console.log('Days to update: ' + this.getDaysToUpdate(lastUpdateThrusday, now));
+
+        return false;
+    }
+
+    static getDaysToUpdate(lastUpdateDate: Date, today: Date) {
+        const diff = today.getTime() - lastUpdateDate.getTime();
+        return new Date(weekInMs - diff).getDate() - 1;
+    }
 }

@@ -1,34 +1,34 @@
 {
-  "manifest_version": 3,
-  "name": "Sokker Plus V2",
-  "version": "1.0",
-  "background": {
-    "service_worker": "background/index.js",
-    "type": "module"
-  },
-  "content_scripts": [
-    {
-      "matches": ["https://sokker.org/player/PID/*"],
-      "js": ["content/player_stats.js"],
-      "css": ["content/style.css"]
+    "manifest_version": 3,
+    "name": "Sokker Plus V2",
+    "version": "1.0",
+    "background": {
+        "service_worker": "background/index.js",
+        "type": "module"
     },
-    {
-      "matches": ["https://sokker.org/pl/app/training/player-info/*"],
-      "js": ["content/player_info.js"]
+    "content_scripts": [
+        {
+            "matches": ["https://sokker.org/player/PID/*"],
+            "js": ["content/player_stats.js"],
+            "css": ["content/style.css"]
+        },
+        {
+            "matches": ["https://sokker.org/pl/app/training/player-info/*"],
+            "js": ["content/player_info.js"]
+        },
+        {
+            "matches": ["https://sokker.org/friendlies/action/public_invitations/*"],
+            "js": ["content/friendly_invitations.js"]
+        }
+    ],
+    "action": {
+        "default_popup": "popup/popup.html"
     },
-    {
-      "matches": ["https://sokker.org/friendlies/action/public_invitations/*"],
-      "js": ["content/friendly_invitations.js"]
-    }
-  ],
-  "action": {
-    "default_popup": "popup/popup.html"
-  },
-  "icons": {
-    "16": "images/favicon.ico",
-    "48": "images/favicon.ico",
-    "128": "images/favicon.ico"
-  },
-  "permissions": ["storage", "tabs", "scripting", "webNavigation"],
-  "host_permissions": ["https://sokker.org/*"]
+    "icons": {
+        "16": "images/favicon.ico",
+        "48": "images/favicon.ico",
+        "128": "images/favicon.ico"
+    },
+    "permissions": ["storage", "tabs", "scripting", "webNavigation"],
+    "host_permissions": ["https://sokker.org/*"]
 }

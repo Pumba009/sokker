@@ -1,191 +1,191 @@
 :root {
-  --color-text: rgb(162, 190, 233);
-  --font-family: 'Nunito Sans', Arial, sans-serif;
-  --font-size: 14px;
-  --line-height: 20px;
-  --bg-table-header: rgb(22, 34, 71);
-  --bg-training-table: rgb(30, 46, 92);
+    --color-text: rgb(162, 190, 233);
+    --font-family: 'Nunito Sans', Arial, sans-serif;
+    --font-size: 14px;
+    --line-height: 20px;
+    --bg-table-header: rgb(22, 34, 71);
+    --bg-training-table: rgb(30, 46, 92);
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 /* ==========================
    TABELA
    ========================== */
 .table__root {
-  display: table;
-  width: 100%; /* dynamiczna szerokość */
-  height: auto; /* dopasowanie wysokości do zawartości */
-  border-collapse: collapse;
-  color: var(--color-text);
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-  unicode-bidi: isolate;
+    display: table;
+    width: 100%; /* dynamiczna szerokość */
+    height: auto; /* dopasowanie wysokości do zawartości */
+    border-collapse: collapse;
+    color: var(--color-text);
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    unicode-bidi: isolate;
 }
 
 .table-row {
-  display: table-row;
-  height: auto; /* dynamiczna wysokość */
-  vertical-align: middle;
-  text-align: center;
-  transition: background-color 0.2s ease;
+    display: table-row;
+    height: auto; /* dynamiczna wysokość */
+    vertical-align: middle;
+    text-align: center;
+    transition: background-color 0.2s ease;
 }
 
 .table__cell {
-  display: table-cell;
-  width: auto; /* dynamiczna szerokość */
-  min-width: 30px;
-  height: auto; /* dynamiczna wysokość */
-  vertical-align: middle;
-  border-bottom: 1px solid rgba(60, 68, 178, 0.45);
-  text-align: center;
-  line-height: var(--line-height);
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  color: var(--color-text);
-  padding: 2px 0;
+    display: table-cell;
+    width: auto; /* dynamiczna szerokość */
+    min-width: 30px;
+    height: auto; /* dynamiczna wysokość */
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(60, 68, 178, 0.45);
+    text-align: center;
+    line-height: var(--line-height);
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    color: var(--color-text);
+    padding: 2px 0;
 }
 
 .table__cell-wrap,
 .table__th-wrap,
 .growth-bg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-  color: var(--color-text);
-  unicode-bidi: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    color: var(--color-text);
+    unicode-bidi: isolate;
 }
 
 .growth-bg--up {
-  background-color: rgb(27, 159, 125);
+    background-color: rgb(27, 159, 125);
 }
 
 .growth-bg--down {
-  background-color: rgb(232, 35, 68);
+    background-color: rgb(232, 35, 68);
 }
 
 .table__cell-wrap {
-  width: auto; /* dynamiczna szerokość */
-  height: auto; /* dynamiczna wysokość */
-  padding: 2px 4px;
-  text-align: center;
+    width: auto; /* dynamiczna szerokość */
+    height: auto; /* dynamiczna wysokość */
+    padding: 2px 4px;
+    text-align: center;
 }
 
 .table__th {
-  display: table-cell;
-  width: auto; /* dynamiczna szerokość */
-  height: auto; /* dynamiczna wysokość */
-  padding: 0;
-  position: relative;
-  vertical-align: middle;
-  text-align: left;
-  text-transform: capitalize;
-  background-color: var(--bg-table-header);
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  color: var(--color-text);
+    display: table-cell;
+    width: auto; /* dynamiczna szerokość */
+    height: auto; /* dynamiczna wysokość */
+    padding: 0;
+    position: relative;
+    vertical-align: middle;
+    text-align: left;
+    text-transform: capitalize;
+    background-color: var(--bg-table-header);
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    color: var(--color-text);
 }
 
 .table__th-wrap {
-  width: auto; /* dynamiczna szerokość */
-  height: auto; /* dynamiczna wysokość */
-  min-height: 40px;
-  cursor: pointer;
-  padding: 2px 4px 2px 2px;
-  text-align: left;
-  text-transform: capitalize;
+    width: auto; /* dynamiczna szerokość */
+    height: auto; /* dynamiczna wysokość */
+    min-height: 40px;
+    cursor: pointer;
+    padding: 2px 4px 2px 2px;
+    text-align: left;
+    text-transform: capitalize;
 }
 
 .tooltip-cell {
-  display: block;
-  width: auto; /* dynamiczna szerokość */
-  height: auto; /* dynamiczna wysokość */
-  cursor: pointer;
-  text-align: left;
-  text-transform: capitalize;
-  margin: 0;
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-  color: var(--color-text);
+    display: block;
+    width: auto; /* dynamiczna szerokość */
+    height: auto; /* dynamiczna wysokość */
+    cursor: pointer;
+    text-align: left;
+    text-transform: capitalize;
+    margin: 0;
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    color: var(--color-text);
 }
 
 /* ==========================
    SPECJALNE ELEMENTY
    ========================== */
 .growth-bg {
-  width: auto; /* dynamiczna szerokość */
-  height: auto; /* dynamiczna wysokość */
-  min-width: 30px;
-  min-height: 30px;
-  border-radius: 4px;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  display: flex;
+    width: auto; /* dynamiczna szerokość */
+    height: auto; /* dynamiczna wysokość */
+    min-width: 30px;
+    min-height: 30px;
+    border-radius: 4px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }
 
 .is-sticky {
-  display: block;
-  width: 100%; /* dynamiczna szerokość */
-  height: auto; /* dynamiczna wysokość */
-  max-height: 100%; /* dynamiczne ograniczenie wysokości */
-  overflow-y: auto;
-  z-index: 2;
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-  color: var(--color-text);
-  text-align: center;
+    display: block;
+    width: 100%; /* dynamiczna szerokość */
+    height: auto; /* dynamiczna wysokość */
+    max-height: 100%; /* dynamiczne ograniczenie wysokości */
+    overflow-y: auto;
+    z-index: 2;
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    color: var(--color-text);
+    text-align: center;
 }
 
 .training-table {
-  display: block;
-  width: 100%; /* dynamiczna szerokość */
-  height: auto; /* dynamiczna wysokość */
-  background-color: var(--bg-training-table);
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-  color: var(--color-text);
-  overflow: hidden;
-  text-align: center;
+    display: block;
+    width: 100%; /* dynamiczna szerokość */
+    height: auto; /* dynamiczna wysokość */
+    background-color: var(--bg-training-table);
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    color: var(--color-text);
+    overflow: hidden;
+    text-align: center;
 }
 
 .mtp-tab__table {
-  display: block;
-  width: 100%; /* dynamiczna szerokość */
-  height: auto; /* dynamiczna wysokość */
-  margin-top: 20px;
-  border-radius: 16px;
-  overflow-x: auto;
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-  color: var(--color-text);
+    display: block;
+    width: 100%; /* dynamiczna szerokość */
+    height: auto; /* dynamiczna wysokość */
+    margin-top: 20px;
+    border-radius: 16px;
+    overflow-x: auto;
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    color: var(--color-text);
 }
 
 .layout__main {
-  display: block;
-  width: 100%; /* dynamiczna szerokość */
-  height: auto; /* dynamiczna wysokość */
-  margin-top: 50px;
-  padding: 20px 12px 0;
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-  color: var(--color-text);
-  transition: margin-top 0.2s ease-in-out;
+    display: block;
+    width: 100%; /* dynamiczna szerokość */
+    height: auto; /* dynamiczna wysokość */
+    margin-top: 50px;
+    padding: 20px 12px 0;
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    color: var(--color-text);
+    transition: margin-top 0.2s ease-in-out;
 }
 
 .float-right {
-  float: right;
+    float: right;
 }

@@ -1,15 +1,15 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "rootDir": "src",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "types": ["node", "chrome", "jest"],
-    "ignoreDeprecations": "6.0"
-  },
-  "include": ["src", "tests", "eslint.config.mjs", "eslint.config.js"]
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "outDir": "dist",
+        "rootDir": ".",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "types": ["node", "chrome", "jest"],
+        "ignoreDeprecations": "6.0"
+    },
+    "include": ["src", "tests", "eslint.config.mjs", "eslint.config.js"]
 }

@@ -1,132 +1,124 @@
 import { IPlayerDetails, ITrainingHistory } from '../../types/interfaces';
 import { PlayerHelper } from '../../utils/player_helper';
-import {
-  createPlayerAtrributeSelector,
-  deleteReportSelector,
-} from '../others/player_atrribute_selector';
+import { createPlayerAtrributeSelector, deleteReportSelector } from '../others/player_atrribute_selector';
 import { Chart, ChartConfiguration } from 'chart.js/auto'; // auto - rejestruje wszystko chyba tak samo jak Chart.register(...registerables)
 //import { Chart, ChartConfiguration, registerables} from "chart.js";
 //Chart.register(...registerables); // rejestracja lini, punktow, skali (nowe rozwiazanie w chart.js od wersji 2.0 lub 3.0 - terefere)
 
 export class TrainingChartReport<T extends IPlayerDetails> implements ITrainingReport {
-  private _chartName = 'Training Skills Report';
-  private _chart: Chart | null = null;
+    private _chartName = 'Training Skills Report';
+    private _chart: Chart | null = null;
 
-  private _playerData: T;
+    private _playerData: T;
 
-  public constructor(playerProgressHistory: T) {
-    this._playerData = playerProgressHistory;
-  }
-
-  public renderTrainingReportOnPage() {
-    createPlayerAtrributeSelector((labelName: string, playerAttributeId: string) => {
-      this.updateChart(labelName, playerAttributeId);
-    });
-    this.createChart();
-  }
-
-  public deleteReport(): void {
-    if (this._chart) {
-      this._chart.destroy();
-      this._chart = null;
+    public constructor(playerProgressHistory: T) {
+        this._playerData = playerProgressHistory;
     }
 
-    const canvas = document.getElementById(this._chartName) as HTMLCanvasElement | null;
-    canvas?.remove();
-
-    deleteReportSelector();
-  }
-
-  public createChart() {
-    const playerTrainingData = this.getPlayerTrainingDataByAttribute('1'); // 1 = kondycja
-    const config = this.getInitialChartConfig(playerTrainingData);
-    const ctx = this.createEmptyCanvas();
-    if (!ctx) {
-      console.log('Nie znaleziono Canvas');
-      return;
+    public renderTrainingReportOnPage() {
+        createPlayerAtrributeSelector((labelName: string, playerAttributeId: string) => {
+            this.updateChart(labelName, playerAttributeId);
+        });
+        this.createChart();
     }
 
-    this._chart = new Chart(ctx, config);
-  }
+    public deleteReport(): void {
+        if (this._chart) {
+            this._chart.destroy();
+            this._chart = null;
+        }
 
-  private createEmptyCanvas(): HTMLCanvasElement {
-    const canvas = document.createElement('canvas');
-    const div = document.createElement('div');
-    const divRow = document.createElement('div');
-    const divPanel = document.createElement('div');
-    const mainDiv = document.getElementsByClassName('l-main__inner')[0];
+        const canvas = document.getElementById(this._chartName) as HTMLCanvasElement | null;
+        canvas?.remove();
 
-    canvas.id = this._chartName;
-    div.id = 'chartContainer';
-    divRow.id = 'myRow';
-    divRow.className = 'col-md-12 col-sm-12 col-xs-12';
-    divRow.style.height = 'auto';
-    divPanel.className = 'panel panel-default';
-    divPanel.id = 'myPanel';
-
-    div.appendChild(canvas);
-    divPanel.appendChild(div);
-    divRow.appendChild(divPanel);
-    mainDiv.appendChild(divRow);
-
-    return canvas;
-  }
-
-  private getInitialChartConfig(playerData: {
-    xValues: string[];
-    yValues: number[];
-  }): ChartConfiguration {
-    return {
-      type: 'line',
-      data: {
-        labels: playerData.xValues,
-        datasets: [
-          {
-            fill: false,
-            label: 'Kondycja',
-            data: playerData.yValues,
-            backgroundColor: 'rgba(255,255,255,1.0)',
-            borderColor: 'rgba(255,255,255,0.1)',
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            max: 20,
-          },
-        },
-      },
-    } as ChartConfiguration;
-  }
-
-  public updateChart(labelName: string, playerAttributeId: string) {
-    if (!this._chart) {
-      return;
+        deleteReportSelector();
     }
 
-    const playerTrainingData = this.getPlayerTrainingDataByAttribute(playerAttributeId);
-    this._chart.data.datasets[0].label = labelName;
-    this._chart.data.datasets[0].data = playerTrainingData.yValues;
-    this._chart.update();
-  }
+    public createChart() {
+        const playerTrainingData = this.getPlayerTrainingDataByAttribute('1'); // 1 = kondycja
+        const config = this.getInitialChartConfig(playerTrainingData);
+        const ctx = this.createEmptyCanvas();
+        if (!ctx) {
+            console.log('Nie znaleziono Canvas');
+            return;
+        }
 
-  private getPlayerTrainingDataByAttribute(playerAttributeId: string): {
-    xValues: string[];
-    yValues: number[];
-  } {
-    const trainingHistory = this._playerData.trainingHistory as ITrainingHistory[];
-    const xValues: string[] = trainingHistory.map((date) =>
-      new Date(date.updateDateTime).toLocaleDateString(),
-    );
-    const playerAttribute = PlayerHelper.decodePlayerAttribute(playerAttributeId);
-    const yValues: number[] = trainingHistory.flatMap((date) => date.playerStats[playerAttribute]);
+        this._chart = new Chart(ctx, config);
+    }
 
-    return { xValues, yValues };
-  }
+    private createEmptyCanvas(): HTMLCanvasElement {
+        const canvas = document.createElement('canvas');
+        const div = document.createElement('div');
+        const divRow = document.createElement('div');
+        const divPanel = document.createElement('div');
+        const mainDiv = document.getElementsByClassName('l-main__inner')[0];
+
+        canvas.id = this._chartName;
+        div.id = 'chartContainer';
+        divRow.id = 'myRow';
+        divRow.className = 'col-md-12 col-sm-12 col-xs-12';
+        divRow.style.height = 'auto';
+        divPanel.className = 'panel panel-default';
+        divPanel.id = 'myPanel';
+
+        div.appendChild(canvas);
+        divPanel.appendChild(div);
+        divRow.appendChild(divPanel);
+        mainDiv.appendChild(divRow);
+
+        return canvas;
+    }
+
+    private getInitialChartConfig(playerData: { xValues: string[]; yValues: number[] }): ChartConfiguration {
+        return {
+            type: 'line',
+            data: {
+                labels: playerData.xValues,
+                datasets: [
+                    {
+                        fill: false,
+                        label: 'Kondycja',
+                        data: playerData.yValues,
+                        backgroundColor: 'rgba(255,255,255,1.0)',
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 20,
+                    },
+                },
+            },
+        } as ChartConfiguration;
+    }
+
+    public updateChart(labelName: string, playerAttributeId: string) {
+        if (!this._chart) {
+            return;
+        }
+
+        const playerTrainingData = this.getPlayerTrainingDataByAttribute(playerAttributeId);
+        this._chart.data.datasets[0].label = labelName;
+        this._chart.data.datasets[0].data = playerTrainingData.yValues;
+        this._chart.update();
+    }
+
+    private getPlayerTrainingDataByAttribute(playerAttributeId: string): {
+        xValues: string[];
+        yValues: number[];
+    } {
+        const trainingHistory = this._playerData.trainingHistory as ITrainingHistory[];
+        const xValues: string[] = trainingHistory.map((date) => new Date(date.updateDateTime).toLocaleDateString());
+        const playerAttribute = PlayerHelper.decodePlayerAttribute(playerAttributeId);
+        const yValues: number[] = trainingHistory.flatMap((date) => date.playerStats[playerAttribute]);
+
+        return { xValues, yValues };
+    }
 }
 
 //   private testData() {

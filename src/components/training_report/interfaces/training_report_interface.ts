@@ -1,4 +1,4 @@
 interface ITrainingReport {
-  renderTrainingReportOnPage(): void;
-  deleteReport(): void;
+    renderTrainingReportOnPage(): void;
+    deleteReport(): void;
 }

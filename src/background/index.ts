@@ -3,51 +3,51 @@ import { action, storageKeys } from '../constants';
 import { IPlayersData } from '../types/interfaces';
 
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('Extension installed');
+    console.log('Extension installed');
 });
 
 // Nasłuchuje na address strony i uruchamia skrypt 'content/players_raport.js'
 // chrome.webNavigation.onHistoryStateUpdated działa tylko gdy strona używa history.pushState / SPA.
 chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
-  if (details.url.includes('/pl/app/training/main-team-progress/')) {
-    chrome.scripting.executeScript({
-      target: { tabId: details.tabId },
-      files: ['content/players_raport.js'],
-    });
-  }
+    if (details.url.includes('/pl/app/training/main-team-progress/')) {
+        chrome.scripting.executeScript({
+            target: { tabId: details.tabId },
+            files: ['content/players_raport.js'],
+        });
+    }
 });
 
 // Nasłuch na event z content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  // Save Players
-  if (message.action == action.SAVE_PLAYERS) {
-    ChromeStorage.savePlayersToStorage(message.payload).then((isSuccess) => {
-      if (isSuccess) {
-        return sendResponse({ status: 'ok' });
-      }
-      return sendResponse({ status: 'fail' });
-    });
-  }
+    // Save Players
+    if (message.action == action.SAVE_PLAYERS) {
+        ChromeStorage.savePlayersToStorage(message.payload).then((isSuccess) => {
+            if (isSuccess) {
+                return sendResponse({ status: 'ok' });
+            }
+            return sendResponse({ status: 'fail' });
+        });
+    }
 
-  // Get Players
-  if (message.action == action.GET_PLAYERS) {
-    ChromeStorage.getDataFromStorage<IPlayersData>(storageKeys.PLAYER_DATA).then((data) => {
-      sendResponse(data);
-    });
-    return true; // async response <-- to jest kluczowe
-    // W Chrome Extensions, jeśli sendResponse jest wywoływane asynchronicznie (czyli w .then()),
-    //  musisz zwrócić true z listenera wiadomości, żeby powiedzieć Chrome, że odpowiedź nadejdzie później
-  }
+    // Get Players
+    if (message.action == action.GET_PLAYERS) {
+        ChromeStorage.getDataFromStorage<IPlayersData>(storageKeys.PLAYER_DATA).then((data) => {
+            sendResponse(data);
+        });
+        return true; // async response <-- to jest kluczowe
+        // W Chrome Extensions, jeśli sendResponse jest wywoływane asynchronicznie (czyli w .then()),
+        //  musisz zwrócić true z listenera wiadomości, żeby powiedzieć Chrome, że odpowiedź nadejdzie później
+    }
 
-  // Get Player By Name
-  if (message.action == action.GET_PLAYER_BY_NAME) {
-    ChromeStorage.getPlayerByName(message.payload).then((data) => {
-      sendResponse(data);
-    });
-    return true; // async response
-  }
+    // Get Player By Name
+    if (message.action == action.GET_PLAYER_BY_NAME) {
+        ChromeStorage.getPlayerByName(message.payload).then((data) => {
+            sendResponse(data);
+        });
+        return true; // async response
+    }
 
-  return true; // <-- to jest kluczowe
+    return true; // <-- to jest kluczowe
 });
 
 /*

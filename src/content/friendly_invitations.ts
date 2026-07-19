@@ -1,100 +1,121 @@
-const invitationThreshold: number = 20000000;
+import { getInvitationLinks, sendInvitations, isInvitationPosibile } from './logic/invitation_logic';
 
-console.log('friendly_invitations');
-
-console.log('Raport start');
-
-function waitForElement(selector: string, callback: (elem: HTMLElement) => void) {
-  const observer = new MutationObserver((mutations, obs) => {
-    const element = document.querySelector<HTMLElement>(selector);
-    if (!element) {
-      return;
-    }
-
-    const tr = element.querySelector('tr');
-    if (tr) {
-      obs.disconnect();
-      callback(element);
-      return;
-    }
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
-}
-
-waitForElement('table.table.table-striped tbody', async (elem) => {
-  console.log('tbody is ready');
-  await fetchData(elem);
-});
+let invitationThreshold: number = 20000000;
 
 async function fetchData(element: HTMLElement) {
-  const rows = element.querySelectorAll<HTMLTableRowElement>('tr');
-  if (!rows) {
-    return;
-  }
-
-  let link: HTMLAnchorElement | null;
-  rows.forEach((row) => {
-    link = row.querySelector<HTMLAnchorElement>('a[href^="app/team/"]');
-    if (!link) {
-      return;
+    const rows = element.querySelectorAll<HTMLTableRowElement>('tr') as NodeListOf<HTMLTableRowElement>;
+    if (!rows) {
+        return;
     }
 
-    const parts = link?.href?.split('/');
-    const teamId = parts ? parts[parts.length - 1] : undefined;
+    const trimedRows = Array.from(rows).slice(1, rows.length - 1); // remove header and navigator rows
+    if (!isInvitationPosibile(trimedRows)) {
+        addMesaageToPage('Brak Ogłoszeń');
+        return;
+    }
 
-    fetch(`https://sokker.org/api/team/${teamId}/stats`)
-      .then((res) => res.json())
-      .then((data) => {
-        const teamData = data.players.totalValue.value;
-        console.log(teamData);
-        if (teamData <= invitationThreshold) {
-          console.log(
-            `wartosc druzyny ${data.id} jest ponizej maksymalnej wartosic: ${invitationThreshold} zl.`,
-          );
-          const invitation = row.querySelector<HTMLAnchorElement>('a[href^="friendlies/action/"]');
-          if (invitation) {
-            console.log(`wysylam zaproszenie do ${data.id}`);
-            fetch(invitation.href, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                // 'X-CSRF-Token': token, // jeśli strona wymaga
-              },
-            })
-              .then((res) => res.json())
-              .then((response) => {
-                console.log('Odpowiedź po wysłaniu zaproszenia:', response);
-              })
-              .catch((err) => console.error('Błąd przy wysyłaniu zaproszenia:', err));
-          } else {
-            console.log(`zaproszenie zostalo juz wyslane do ${data.id}`);
-          }
-        } else {
-          console.log(`druzyna jest za dobra ${teamData}`);
-        }
-      });
-  });
+    const invitationList = await getInvitationLinks(trimedRows, invitationThreshold);
+    if (invitationList.length <= 0) {
+        addMesaageToPage('Brak Ogłoszeń');
+        return;
+    }
+
+    await addInvitationButton(invitationList);
 }
-//https://sokker.org/api/team/146929/stats
-//{"id":146929,"players":{"count":13,"averageAge":27.9231,"averageForm":53,"averageFormSkill":9,"totalValue":{"value":10021000,"currency":"z\u0142"},"averageValue":{"value":770846,"currency":"z\u0142"},"averageMarks":37},"reputation":9,"rankChange":{"currentRank":1766.42,"previousRank":1680.95},"matchesStats":null}
 
-// async function openPage(element: HTMLElement) {
-//   const rows = element.querySelectorAll<HTMLTableRowElement>('tr');
-//   if(!rows){
-//     return;
-//   }
-//   let link: HTMLAnchorElement | null;
-//   rows.forEach((row, index) => {
-//     link = row.querySelector<HTMLAnchorElement>('a[href^="app/team/"]');
-//     if (link) {
-//       console.log(link.textContent?.trim()); // KINGSHOW FC
-//       console.log(link.href); // pełny URL
+function addMesaageToPage(message: string) {
+    const ul = addRightMenuItemToPanel();
+    if (!ul) {
+        return;
+    }
 
-//       chrome.runtime.sendMessage({
-//         action: 'OPEN_TAB',
-//         url: link.href,
-//       });
-//     }
-//   });
-// }
+    const div = document.createElement('div');
+    const span = document.createElement('span');
+    span.textContent = message;
+    span.style.fontWeight = 'bold';
+
+    div.appendChild(span);
+    ul.lastChild?.appendChild(div);
+}
+
+/**
+ * Dodaje przycisk "Wyślij zaproszenia" do nagłówka panelu.
+ */
+async function addInvitationButton(invitationList: { invitationLink: string; teamId: string }[]) {
+    const ul = addRightMenuItemToPanel();
+    if (!ul) {
+        return;
+    }
+
+    const div = document.createElement('div');
+    const span = document.createElement('span');
+
+    span.textContent = 'Wyślij zaproszenia';
+    span.style.cursor = 'pointer';
+    span.style.textDecoration = 'underline';
+
+    span.addEventListener('click', async () => {
+        span.style.color = 'blue';
+        const isSuccess = await sendInvitations(invitationList);
+        if (isSuccess) {
+            span.textContent = 'Zaproszenia dostarczone';
+            span.style.color = 'green';
+        }
+    });
+
+    div.appendChild(span);
+    ul.lastChild?.appendChild(div);
+}
+
+function addRightMenuItemToPanel() {
+    const panelHeading = document.querySelector('.panel-heading');
+    if (!panelHeading) {
+        return;
+    }
+
+    const ul = panelHeading.querySelector('ul');
+    if (!ul) {
+        return;
+    }
+
+    const li = document.createElement('li');
+
+    ul.style.display = 'flex';
+    li.style.marginLeft = 'auto';
+    li.style.paddingTop = '5px';
+    li.style.fontWeight = 'bold';
+
+    ul.appendChild(li);
+
+    return ul;
+}
+
+export function waitForElement(selector: string, callback: (elem: HTMLElement) => void) {
+    const observer = new MutationObserver((mutations, obs) => {
+        const element = document.querySelector<HTMLElement>(selector);
+        if (!element) {
+            return;
+        }
+
+        const tr = element.querySelector('tr');
+        if (tr) {
+            obs.disconnect();
+            callback(element);
+            return;
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+// Inicjalizacja: pobierz ustawienia i uruchom obserwatora
+if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    chrome.storage.local.get('invitationThreshold', (result) => {
+        if (result.invitationThreshold) {
+            invitationThreshold = Number(result.invitationThreshold);
+        }
+        waitForElement('table.table.table-striped tbody', (elem) => {
+            fetchData(elem);
+        });
+    });
+}

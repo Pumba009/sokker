@@ -1,65 +1,65 @@
 import { IPlayerStats, IPlayersPage, ITrainingDetails } from '../types/interfaces';
 
 export class PageHelper {
-  static getPlayersStatsFromPage(tableRows: HTMLElement): IPlayersPage[] {
-    const players: IPlayersPage[] = [];
+    static getPlayersStatsFromPage(tableRows: HTMLElement): IPlayersPage[] {
+        const players: IPlayersPage[] = [];
 
-    const rows = tableRows.querySelectorAll<HTMLTableRowElement>('tr.table-row');
-    rows.forEach((row) => {
-      players.push(this.GetPlayersSkillsFromPage(row));
-    });
+        const rows = tableRows.querySelectorAll<HTMLTableRowElement>('tr.table-row');
+        rows.forEach((row) => {
+            players.push(this.GetPlayersSkillsFromPage(row));
+        });
 
-    return players;
-  }
-
-  private static GetPlayersSkillsFromPage(tableRow: HTMLTableRowElement): IPlayersPage {
-    const playerName = getPlayersName(tableRow);
-
-    const stats: IPlayerStats = {
-      stamina_num: getPlayersData(tableRow.cells[6]), //stamina_num
-      speed_num: getPlayersData(tableRow.cells[7]), //speed_num
-      technique_num: getPlayersData(tableRow.cells[8]), //technique_num
-      pass_num: getPlayersData(tableRow.cells[9]), //pass_num
-      keeper_num: getPlayersData(tableRow.cells[10]), //keeper_num
-      defense_num: getPlayersData(tableRow.cells[11]), //defense_num
-      playmaker_num: getPlayersData(tableRow.cells[12]), //playmaker_num
-      striker_num: getPlayersData(tableRow.cells[13]), //striker_num
-    };
-
-    const trainingDetails = {
-      trainingType: getTrainingType(tableRow.cells[18]),
-      effectivePercentage: getTrainingEff(tableRow.cells[21]),
-    } as ITrainingDetails;
-
-    return {
-      id: tableRow.dataset.rowId ?? '',
-      name: playerName,
-      playerStats: stats,
-      trainingDetails: trainingDetails,
-    } as IPlayersPage;
-
-    function getPlayersData(cell: HTMLTableCellElement): number {
-      const playerData = parseInt(cell?.childNodes[0]?.childNodes[0]?.textContent ?? '');
-      if (isNaN(playerData)) {
-        console.log(
-          `Bład podczas parsowania umiejetnosci zawodnika: ${playerName}, value: ${cell?.childNodes[0]?.childNodes[0]?.textContent}`,
-        );
-      }
-      return playerData;
+        return players;
     }
 
-    function getPlayersName(tableRow: HTMLTableRowElement) {
-      const anchor = tableRow.cells[1]?.querySelector('a'); //cells[0] - flaga,  cells[1] - name;
-      const playerName = anchor?.textContent?.trim();
-      return playerName;
-    }
+    private static GetPlayersSkillsFromPage(tableRow: HTMLTableRowElement): IPlayersPage {
+        const playerName = getPlayersName(tableRow);
 
-    function getTrainingType(cell: HTMLTableCellElement): string {
-      return cell?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.textContent ?? '';
-    }
+        const stats: IPlayerStats = {
+            stamina_num: getPlayersData(tableRow.cells[6]), //stamina_num
+            speed_num: getPlayersData(tableRow.cells[7]), //speed_num
+            technique_num: getPlayersData(tableRow.cells[8]), //technique_num
+            pass_num: getPlayersData(tableRow.cells[9]), //pass_num
+            keeper_num: getPlayersData(tableRow.cells[10]), //keeper_num
+            defense_num: getPlayersData(tableRow.cells[11]), //defense_num
+            playmaker_num: getPlayersData(tableRow.cells[12]), //playmaker_num
+            striker_num: getPlayersData(tableRow.cells[13]), //striker_num
+        };
 
-    function getTrainingEff(cell: HTMLTableCellElement): string {
-      return cell?.childNodes[0]?.textContent ?? '';
+        const trainingDetails = {
+            trainingType: getTrainingType(tableRow.cells[18]),
+            effectivePercentage: getTrainingEff(tableRow.cells[21]),
+        } as ITrainingDetails;
+
+        return {
+            id: tableRow.dataset.rowId ?? '',
+            name: playerName,
+            playerStats: stats,
+            trainingDetails: trainingDetails,
+        } as IPlayersPage;
+
+        function getPlayersData(cell: HTMLTableCellElement): number {
+            const playerData = parseInt(cell?.childNodes[0]?.childNodes[0]?.textContent ?? '');
+            if (isNaN(playerData)) {
+                console.log(
+                    `Bład podczas parsowania umiejetnosci zawodnika: ${playerName}, value: ${cell?.childNodes[0]?.childNodes[0]?.textContent}`,
+                );
+            }
+            return playerData;
+        }
+
+        function getPlayersName(tableRow: HTMLTableRowElement) {
+            const anchor = tableRow.cells[1]?.querySelector('a'); //cells[0] - flaga,  cells[1] - name;
+            const playerName = anchor?.textContent?.trim();
+            return playerName;
+        }
+
+        function getTrainingType(cell: HTMLTableCellElement): string {
+            return cell?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.textContent ?? '';
+        }
+
+        function getTrainingEff(cell: HTMLTableCellElement): string {
+            return cell?.childNodes[0]?.textContent ?? '';
+        }
     }
-  }
 }

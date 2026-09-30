@@ -12,7 +12,7 @@ export function createPlayerAtrributeSelector(populateChartCallback: (skillId: s
     selectDiv.className = 'col-sm-7';
 
     const label = document.createElement('label');
-    label.innerHTML = 'Wybież umiejętność: ';
+    label.innerHTML = 'Umiejętność: ';
 
     const select = document.createElement('select');
     select.className = 'panel';

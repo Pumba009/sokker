@@ -10,6 +10,10 @@ async function renderTrainingPlayerReport() {
 
     const playerName = getPlayerNameFromPage();
     const player = await loadPlayerStatsFromStorage(playerName);
+    if (!player) {
+        return;
+    }
+
     const manager = new TrainigReportManager(player);
 
     createReportSelector((rv) => manager.renderReport(rv));
